@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Input, Wrapper} from '../UI/UIComponents';
+import {Button, Input, LinkEl, Wrapper} from '../UI/UIComponents';
 import styled from "styled-components";
 
 const Form = styled.form`
@@ -7,6 +7,10 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+  p{
+    margin-top: 1.5rem;
+  };
 `
 
 
@@ -25,7 +29,8 @@ export const UserLogin = () => {
                     placeholder='Password'
                 />
                 <Button>Login</Button>
-                <a href="/register">Create an account</a>
+                <p>Create an Account</p>
+                <LinkEl to='/register' value='Click'/>
             </Form>
         </Wrapper>
     )
