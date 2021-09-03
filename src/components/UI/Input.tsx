@@ -11,10 +11,10 @@ interface InputProps {
 }
 
 const StyledInput = styled.input`
-  width: 90%;
-  max-width: 25rem;
-  margin: .8rem;
-  padding: 0.7rem;
+  width: 100%;
+  max-width: 30rem;
+  padding: 1rem 0.5rem ;
+  margin: .5rem 0;
   border: .15rem solid black;
   font-size: inherit;
   font-weight: 700;

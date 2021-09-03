@@ -18,6 +18,12 @@ const GlobalStyles = createGlobalStyle`
     height: 100%;
   }
 
+  :root {
+    --color-background: #F2F0D5;
+    --color-button-primary: #A6BF4B;
+    --color-button-secondary: #668C4A;
+  }
+
   body {
     font-family: 'Roboto', sans-serif;
     box-sizing: border-box;

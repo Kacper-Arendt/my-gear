@@ -1,10 +1,19 @@
 import React from "react";
-import {Input} from '../UI/UIComponents';
+import {Button, Input, Wrapper} from '../UI/UIComponents';
+import styled from "styled-components";
+
+const Form = styled.form`
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 
 export const UserLogin = () => {
     return (
-        <>
-            <form>
+        <Wrapper>
+            <Form>
                 <Input
                     type='email'
                     name='email'
@@ -15,9 +24,9 @@ export const UserLogin = () => {
                     name='password'
                     placeholder='Password'
                 />
-                <button>Login</button>
+                <Button>Login</Button>
                 <a href="/register">Create an account</a>
-            </form>
-        </>
+            </Form>
+        </Wrapper>
     )
 }
