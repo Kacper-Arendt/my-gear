@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {UserLogin} from "./components/Components";
+import {Register, UserLogin} from "./components/Components";
 import {createGlobalStyle} from 'styled-components'
 
 const GlobalStyles = createGlobalStyle`
@@ -33,6 +33,9 @@ function App() {
                 <Switch>
                     <Route path='/login'>
                         <UserLogin/>
+                    </Route>
+                    <Route path='/register'>
+                        <Register/>
                     </Route>
                 </Switch>
             </Router>
