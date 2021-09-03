@@ -1,9 +1,14 @@
-
+import React from "react";
 
 export const UserLogin = () => {
     return (
         <>
-            <h1>hello</h1>
+            <form>
+                <input type="email'"/>
+                <input type="password"/>
+                <button>Login</button>
+                <a href="/register">Create an account</a>
+            </form>
         </>
     )
 }
