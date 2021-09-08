@@ -5,7 +5,8 @@ interface IProps {
     size?: string,
     backgroundColor?: string,
     onClick?: (e: React.SyntheticEvent) => void,
-    children: string
+    children: string,
+    type?: 'submit' | 'reset'
 }
 
 const ButtonEl = styled.button<IProps>`
@@ -30,6 +31,7 @@ const ButtonEl = styled.button<IProps>`
 export const Button = (props: IProps) => {
     return (
         <ButtonEl
+            type={props.type}
             size={props.size}
             onClick={props.onClick}
             backgroundColor={props.backgroundColor}
