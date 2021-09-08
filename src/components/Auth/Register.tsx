@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Input, LinkEl, Wrapper} from "../UI/UIComponents";
+import {Button, Input, Line, LinkEl, Wrapper} from "../UI/UIComponents";
 import styled from "styled-components";
 
 const Form = styled.form`
@@ -8,14 +8,17 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
 
-  p{
+  p {
     margin-top: 1.5rem;
-  };
+  }
+;
 `
 
 export const Register = () => {
     return (
         <Wrapper>
+            <h2>Welcome</h2>
+            <Line/>
             <Form>
                 <Input
                     type='text'
@@ -32,9 +35,14 @@ export const Register = () => {
                     name='password'
                     placeholder='Password'
                 />
+                <Input
+                    type='password'
+                    name='password'
+                    placeholder='Repeat Your Password'
+                />
                 <Button>Register</Button>
                 <p>Already have an account?</p>
-                <LinkEl to='/login' value='Click' />
+                <LinkEl to='/login' value='Click'/>
             </Form>
         </Wrapper>
     )

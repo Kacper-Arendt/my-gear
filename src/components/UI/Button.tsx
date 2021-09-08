@@ -15,6 +15,7 @@ const ButtonEl = styled.button<IProps>`
   margin: .5rem 0;
   border: none;
   color: white;
+  cursor: pointer;
   font-weight: bold;
   letter-spacing: 1.3px;
   font-size: ${(props: IProps) => props.size ? props.size : '1.4rem'};
