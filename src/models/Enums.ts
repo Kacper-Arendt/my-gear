@@ -1,6 +1,7 @@
 export enum AppStatus {
     Idle = 'IDLE',
     Loading = 'LOADING',
+    Authentication = 'AUTHENTICATION'
 }
 
 export enum FirebasePath {

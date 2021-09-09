@@ -1,11 +1,11 @@
 export interface IUser {
-    id: string,
+    readonly id: string,
     email: string,
     name: string,
     isAuth?: boolean,
 };
 
 export interface INewUser extends IUser {
-    password: string,
-    confirmPassword: string,
+    readonly password: string,
+    readonly confirmPassword: string,
 };

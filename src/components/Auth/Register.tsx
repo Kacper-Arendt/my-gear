@@ -3,6 +3,7 @@ import {Button, Input, Line, LinkEl, Wrapper} from "../UI/UIComponents";
 import styled from "styled-components";
 import {INewUser} from "../../models/User";
 import {auth, generateUserDocument} from "./Firebase";
+import {useHistory} from "react-router-dom";
 
 const Form = styled.form`
   width: 25rem;
@@ -23,7 +24,8 @@ export const Register = () => {
         confirmPassword: '',
         name: '',
     });
-    const [, setErrorMessage] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+    const history = useHistory();
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setUser({
@@ -37,15 +39,17 @@ export const Register = () => {
         try {
             const createUser = await auth.createUserWithEmailAndPassword(user.email, user.password);
             if (createUser.user) {
+                setMessage('User Created');
                 const id = createUser.user.uid;
                 setUser({
                     ...user,
                     id: id,
                 })
                 await generateUserDocument(user, id);
+
             }
         } catch (error) {
-            setErrorMessage(error.message);
+            setMessage('Email already in use ');
         }
         setUser({
             id: '',
@@ -54,6 +58,7 @@ export const Register = () => {
             confirmPassword: '',
             name: '',
         })
+        if (auth.currentUser) history.push('/');
     };
 
     return (
@@ -90,6 +95,7 @@ export const Register = () => {
                     onChange={updateField}
                 />
                 <Button type='submit'>Register</Button>
+                <p>{message && message}</p>
                 <p>Already have an account?</p>
                 <LinkEl to='/login' value='Click'/>
             </Form>

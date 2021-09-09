@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {HomePage, Register, UserLogin} from "./components/Components";
+import {AuthRoute, HomePage, Register, UserLogin} from "./components/Components";
 import {createGlobalStyle} from 'styled-components'
 import {auth, getUserDocument} from "./components/Auth/Firebase";
 import {useAppDispatch, useAppSelector} from "./redux/hooks";
 import {login, changeStatus} from './redux/slice/Slices'
 import {AppStatus} from "./models/Models";
 import {PrivateRoute} from "./components/Auth/routes/PrivateRoute";
+import * as path from "path";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -41,18 +42,18 @@ function App() {
     const {app, user} = useAppSelector(state => state);
 
     useEffect(() => {
-            return auth.onAuthStateChanged(async user => {
-                if (user) {
-                    const response = await getUserDocument(user.uid);
-                    if (response) {
-                        dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
-                        console.log(`User is auth /app`, response)
-                    }
-                } else {
-                    console.log('User not found');
+        return auth.onAuthStateChanged(async user => {
+            if (user) {
+                const response = await getUserDocument(user.uid);
+                if (response) {
+                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
+                    console.log(`User is auth /app`, response)
                 }
-                dispatch(changeStatus(AppStatus.Idle))
-            });
+            } else {
+                console.log('User not found');
+            }
+            dispatch(changeStatus(AppStatus.Idle))
+        });
     }, [dispatch]);
 
     return (
@@ -61,13 +62,9 @@ function App() {
             <Router>
                 {app.status === AppStatus.Loading ? <h2>Loading...</h2> :
                     <Switch>
-                        <Route path='/login'>
-                            <UserLogin/>
-                        </Route>
-                        <Route path='/register' exact>
-                            <Register/>
-                        </Route>
-                        <PrivateRoute isSignedIn={!!user.isAuth} component={HomePage} path='/' exact/>
+                        <AuthRoute component={UserLogin} isSignedIn={!!user.isAuth} path='/login'/>
+                        <AuthRoute component={Register} isSignedIn={!!user.isAuth} path='/register' exact/>
+                        <PrivateRoute isSignedIn={!!user.isAuth} component={HomePage} path='/'/>
                     </Switch>
                 }
             </Router>

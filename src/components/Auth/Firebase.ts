@@ -50,3 +50,7 @@ export const getUserDocument = async (id: string) => {
         console.error("Error fetching user", error);
     }
 };
+
+export const signOut = async () => {
+    await auth.signOut();
+};
