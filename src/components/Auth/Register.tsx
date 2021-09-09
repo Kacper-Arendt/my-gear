@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, Input, Line, LinkEl, Wrapper} from "../UI/UIComponents";
 import styled from "styled-components";
 import {INewUser} from "../../models/User";
-import {appAuth, generateUserDocument} from "./Firebase";
+import {auth, generateUserDocument} from "./Firebase";
 
 const Form = styled.form`
   width: 25rem;
@@ -13,7 +13,6 @@ const Form = styled.form`
   p {
     margin-top: 1.5rem;
   }
-;
 `
 
 export const Register = () => {
@@ -24,7 +23,7 @@ export const Register = () => {
         confirmPassword: '',
         name: '',
     });
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [, setErrorMessage] = useState<string>('');
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setUser({
@@ -36,7 +35,7 @@ export const Register = () => {
     const createUserWithEmailAndPasswordHandler = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
-            const createUser = await appAuth.createUserWithEmailAndPassword(user.email, user.password);
+            const createUser = await auth.createUserWithEmailAndPassword(user.email, user.password);
             if (createUser.user) {
                 const id = createUser.user.uid;
                 setUser({

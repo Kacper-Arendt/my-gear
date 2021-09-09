@@ -1,8 +1,7 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {Button, Input, Line, LinkEl, Wrapper} from '../UI/UIComponents';
 import styled from "styled-components";
-import {useHistory} from "react-router-dom";
-import {appAuth, getUserDocument} from "./Firebase";
+import {auth, getUserDocument} from "./Firebase";
 
 const Form = styled.form`
   width: 25rem;
@@ -16,18 +15,15 @@ const Form = styled.form`
 ;
 `
 
-
 export const UserLogin = () => {
     const [formData, setFormData] = useState({email: '', password: ''});
-    const [error, setError] = useState('');
-    const [fetchedUser, setFetchedUser] = useState({
+    const [, setErrors] = useState('');
+    const [, setFetchedUser] = useState({
         id: '',
         name: '',
         email: '',
         isAuth: false,
     });
-    // const [user, loading, error] = useAuthState(auth)
-    const history = useHistory();
 
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,10 +33,10 @@ export const UserLogin = () => {
         });
     };
 
-    const signInWithEmailAndPasswordHandler = async (e: React.SyntheticEvent) => {
+    const signInWithEmailAndPasswordHandler = async (e: React.SyntheticEvent): Promise<void> => {
         e.preventDefault();
         try {
-            const userLogin = await appAuth.signInWithEmailAndPassword(formData.email, formData.password);
+            const userLogin = await auth.signInWithEmailAndPassword(formData.email, formData.password);
             if (userLogin.user) {
                 const userId = userLogin.user.uid;
                 const response = await getUserDocument(userId);
@@ -51,12 +47,11 @@ export const UserLogin = () => {
                         name: response.name,
                         isAuth: true,
                     })
-                    console.log(response)
                 }
             }
         } catch
             (error) {
-            setError(error.message);
+            setErrors(error.message);
             console.log(error)
         }
         setFormData({
@@ -64,7 +59,6 @@ export const UserLogin = () => {
             password: ''
         })
     };
-
 
     return (
         <Wrapper>

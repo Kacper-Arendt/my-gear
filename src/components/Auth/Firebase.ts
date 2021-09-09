@@ -12,14 +12,8 @@ const firebaseConfig = {
     measurementId: "G-2X0L8LFF6T"
 };
 export default !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
-export const appAuth = firebase.auth();
+export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-
-const provider = new firebase.auth.GoogleAuthProvider();
-
-export const signInWithGoogle = () => {
-    appAuth.signInWithRedirect(provider);
-};
 
 export const generateUserDocument = async (user: IUser, id: string) => {
     if (!id) return;
