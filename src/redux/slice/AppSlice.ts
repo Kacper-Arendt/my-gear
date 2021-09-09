@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {IApp, AppStatus} from "../../models/Models";
 
-const initialState = {status: AppStatus.Idle, message: ''} as IApp;
+const initialState = {status: AppStatus.Loading, message: ''} as IApp;
 
 export const appSlice = createSlice({
     name: 'app,',

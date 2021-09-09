@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {HomePage, Register, UserLogin} from "./components/Components";
 import {createGlobalStyle} from 'styled-components'
 import {auth, getUserDocument} from "./components/Auth/Firebase";
-import {useAppDispatch} from "./redux/hooks";
+import {useAppDispatch, useAppSelector} from "./redux/hooks";
 import {login, changeStatus} from './redux/slice/Slices'
-import {AppStatus, IUser} from "./models/Models";
-
+import {AppStatus} from "./models/Models";
+import {PrivateRoute} from "./components/Auth/routes/PrivateRoute";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -38,57 +38,38 @@ const GlobalStyles = createGlobalStyle`
 
 function App() {
     const dispatch = useAppDispatch();
-    const [fetchedUser, setFetchedUser] = useState({
-        id: '',
-        name: '',
-        email: '',
-        isAuth: false,
-    });
+    const {app, user} = useAppSelector(state => state);
 
     useEffect(() => {
-        onAuthStateChange();
-    }, []);
-
-    useEffect(() => {
-        dispatch(login(fetchedUser as IUser));
-    }, [fetchedUser, dispatch]);
-
-    const onAuthStateChange = () => {
-        dispatch(changeStatus(AppStatus.Loading));
-        return auth.onAuthStateChanged(async user => {
-            if (user) {
-                const response = await getUserDocument(user.uid);
-                if (response) {
-                    setFetchedUser({
-                        id: response.id,
-                        email: response.email,
-                        name: response.name,
-                        isAuth: true,
-                    });
-                    console.log(`User is auth /app`, response)
+            return auth.onAuthStateChanged(async user => {
+                if (user) {
+                    const response = await getUserDocument(user.uid);
+                    if (response) {
+                        dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
+                        console.log(`User is auth /app`, response)
+                    }
+                } else {
+                    console.log('User not found');
                 }
-            } else {
-                console.log('User not found');
-            }
-            dispatch(changeStatus(AppStatus.Idle))
-        });
-    };
+                dispatch(changeStatus(AppStatus.Idle))
+            });
+    }, [dispatch]);
 
     return (
         <>
             <GlobalStyles/>
             <Router>
-                <Switch>
-                    <Route path='/login'>
-                        <UserLogin/>
-                    </Route>
-                    <Route path='/register'>
-                        <Register/>
-                    </Route>
-                    <Route path='/'>
-                        <HomePage/>
-                    </Route>
-                </Switch>
+                {app.status === AppStatus.Loading ? <h2>Loading...</h2> :
+                    <Switch>
+                        <Route path='/login'>
+                            <UserLogin/>
+                        </Route>
+                        <Route path='/register' exact>
+                            <Register/>
+                        </Route>
+                        <PrivateRoute isSignedIn={!!user.isAuth} component={HomePage} path='/' exact/>
+                    </Switch>
+                }
             </Router>
         </>
     );

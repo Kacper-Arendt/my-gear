@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 import {IUser} from "../../models/Models";
 
-const initialState = {id: '', name: '', email: ''} as IUser;
+const initialState = {id: '', name: '', email: '', isAuth: false} as IUser;
 
 export const UserSlice = createSlice({
     name: 'user',
