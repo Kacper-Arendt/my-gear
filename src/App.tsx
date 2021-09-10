@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {AuthRoute, HomePage, Register, UserLogin} from "./components/Components";
+import {BrowserRouter as Router, Switch} from "react-router-dom";
 import {createGlobalStyle} from 'styled-components'
-import {auth, getUserDocument} from "./components/Auth/Firebase";
-import {useAppDispatch, useAppSelector} from "./redux/hooks";
-import {login, changeStatus} from './redux/slice/Slices'
+import {AuthRoute, HomePage, Register, UserLogin, PrivateRoute} from "./components/Components";
+import {useAppDispatch, useAppSelector, changeStatus, login} from "./redux/ReduxComponents";
 import {AppStatus} from "./models/Models";
-import {PrivateRoute} from "./components/Auth/routes/PrivateRoute";
-import * as path from "path";
+import {User} from "firebase/auth";
+import {firebaseOnUserChange, getUserDocument} from './components/firebase/Firebase';
+
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -42,12 +41,11 @@ function App() {
     const {app, user} = useAppSelector(state => state);
 
     useEffect(() => {
-        return auth.onAuthStateChanged(async user => {
+        return firebaseOnUserChange(async (user: User | null) => {
             if (user) {
                 const response = await getUserDocument(user.uid);
-                if (response) {
-                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
-                    console.log(`User is auth /app`, response)
+                if (response){
+                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}));
                 }
             } else {
                 console.log('User not found');

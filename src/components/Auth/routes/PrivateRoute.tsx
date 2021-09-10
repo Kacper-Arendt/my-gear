@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-    Route,
-    Redirect,
-    RouteProps,
-} from 'react-router-dom';
+import {Route, Redirect, RouteProps} from 'react-router-dom';
 
 interface PrivateRouteProps extends RouteProps {
     component: any;
@@ -11,7 +7,7 @@ interface PrivateRouteProps extends RouteProps {
 }
 
 export const PrivateRoute = (props: PrivateRouteProps) => {
-    const { component: Component, isSignedIn, ...rest } = props;
+    const {component: Component, isSignedIn, ...rest} = props;
 
     return (
         <Route
@@ -23,7 +19,7 @@ export const PrivateRoute = (props: PrivateRouteProps) => {
                     <Redirect
                         to={{
                             pathname: '/login',
-                            state: { from: routeProps.location }
+                            state: {from: routeProps.location}
                         }}
                     />
                 )
@@ -31,4 +27,3 @@ export const PrivateRoute = (props: PrivateRouteProps) => {
         />
     );
 };
-export default PrivateRoute;

@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import {Button, Input, Line, LinkEl, Wrapper} from "../UI/UIComponents";
 import styled from "styled-components";
 import {INewUser} from "../../models/User";
-import {auth, generateUserDocument} from "./Firebase";
-import {useHistory} from "react-router-dom";
+import { generateUserDocument} from "../firebase/Firestore";
+import {firebaseCreateUserWithEmailAndPassword} from "../firebase/Auth";
 
 const Form = styled.form`
   width: 25rem;
@@ -25,7 +25,6 @@ export const Register = () => {
         name: '',
     });
     const [message, setMessage] = useState<string>('');
-    const history = useHistory();
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setUser({
@@ -37,16 +36,15 @@ export const Register = () => {
     const createUserWithEmailAndPasswordHandler = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
-            const createUser = await auth.createUserWithEmailAndPassword(user.email, user.password);
+            const createUser = await firebaseCreateUserWithEmailAndPassword(user.email, user.password);
+            console.log(createUser.user)
             if (createUser.user) {
                 setMessage('User Created');
-                const id = createUser.user.uid;
                 setUser({
                     ...user,
-                    id: id,
+                    id: createUser.user.uid,
                 })
-                await generateUserDocument(user, id);
-
+                await generateUserDocument(createUser.user.uid, user);
             }
         } catch (error) {
             setMessage('Email already in use ');
@@ -58,7 +56,6 @@ export const Register = () => {
             confirmPassword: '',
             name: '',
         })
-        if (auth.currentUser) history.push('/');
     };
 
     return (

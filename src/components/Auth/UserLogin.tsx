@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import {Button, Input, Line, LinkEl, Wrapper} from '../UI/UIComponents';
 import styled from "styled-components";
-import {auth, getUserDocument} from "./Firebase";
+import {useAppDispatch, login} from "../../redux/ReduxComponents";
+import {firebaseSignInWithEmailAndPassword} from "../firebase/Auth";
+import {getUserDocument} from "../firebase/Firestore";
 
 const Form = styled.form`
   width: 25rem;
@@ -12,19 +14,12 @@ const Form = styled.form`
   p {
     margin-top: 1.5rem;
   }
-;
 `
 
 export const UserLogin = () => {
+    const dispatch = useAppDispatch();
     const [formData, setFormData] = useState({email: '', password: ''});
-    const [, setErrors] = useState('');
-    const [, setFetchedUser] = useState({
-        id: '',
-        name: '',
-        email: '',
-        isAuth: false,
-    });
-
+    const [message, setMessage] = useState('');
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({
@@ -36,23 +31,15 @@ export const UserLogin = () => {
     const signInWithEmailAndPasswordHandler = async (e: React.SyntheticEvent): Promise<void> => {
         e.preventDefault();
         try {
-            const userLogin = await auth.signInWithEmailAndPassword(formData.email, formData.password);
+            const userLogin = await firebaseSignInWithEmailAndPassword(formData.email, formData.password);
             if (userLogin.user) {
-                const userId = userLogin.user.uid;
-                const response = await getUserDocument(userId);
+                const response = await getUserDocument(userLogin.user.uid);
                 if (response) {
-                    setFetchedUser({
-                        id: response.id,
-                        email: response.email,
-                        name: response.name,
-                        isAuth: true,
-                    })
+                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
                 }
             }
-        } catch
-            (error) {
-            setErrors(error.message);
-            console.log(error)
+        } catch (error) {
+            setMessage('Something went wrong');
         }
         setFormData({
             email: '',
@@ -80,6 +67,7 @@ export const UserLogin = () => {
                     onChange={updateField}
                 />
                 <Button>Login</Button>
+                {message && message}
                 <p>Create an Account?</p>
                 <LinkEl to='/register' value='Click'/>
                 <LinkEl to='/reset' value='Forgot Your Password?'/>
