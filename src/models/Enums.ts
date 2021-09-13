@@ -6,4 +6,5 @@ export enum AppStatus {
 
 export enum FirebasePath {
     Users = 'users',
+    Gears = 'gears',
 }

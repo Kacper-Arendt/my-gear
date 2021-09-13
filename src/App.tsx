@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Switch} from "react-router-dom";
 import {createGlobalStyle} from 'styled-components'
-import {AuthRoute, HomePage, Register, UserLogin, PrivateRoute} from "./components/Components";
+import {AuthRoute, MainPage, Register, UserLogin, PrivateRoute} from "./components/Components";
 import {useAppDispatch, useAppSelector, changeStatus, login} from "./redux/ReduxComponents";
 import {AppStatus} from "./models/Models";
 import {User} from "firebase/auth";
@@ -62,7 +62,7 @@ function App() {
                     <Switch>
                         <AuthRoute component={UserLogin} isSignedIn={!!user.isAuth} path='/login'/>
                         <AuthRoute component={Register} isSignedIn={!!user.isAuth} path='/register' exact/>
-                        <PrivateRoute isSignedIn={!!user.isAuth} component={HomePage} path='/'/>
+                        <PrivateRoute isSignedIn={!!user.isAuth} component={MainPage} path='/'/>
                     </Switch>
                 }
             </Router>

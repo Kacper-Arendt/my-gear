@@ -1,8 +1,7 @@
 import {firestore} from "./InitializeApp";
-import {doc, collection, getDoc, setDoc} from 'firebase/firestore'
+import {addDoc, collection, doc, getDoc, setDoc} from 'firebase/firestore'
 import {IUser} from "../../models/User";
 import {FirebasePath} from "../../models/Enums";
-
 
 export function firebaseCollection(path: string) {
     return collection(firestore, path);
@@ -31,6 +30,14 @@ export const generateUserDocument = async (id: string, user: IUser): Promise<any
         } else {
             console.log(`User document already exists`);
         }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const generateGearDocument = async (gearData: object): Promise<any> => {
+    try {
+        return await addDoc(collection(firestore, FirebasePath.Gears), gearData)
     } catch (error) {
         console.log(error);
     }
