@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useAppSelector } from "../redux/hooks";
 import { firebaseSignOut } from "./firebase/Auth";
 import { AddGear } from "./gear/AddGear";
+import { GetGears } from "./gear/GetGears";
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,7 +17,6 @@ const User = styled.div`
   align-items: start;
   gap: 0.5rem;
 `;
-
 const GearList = styled.div`
   width: 60%;
   background-color: #f8f8f8;
@@ -32,14 +32,6 @@ const GearList = styled.div`
   }
 `;
 
-const GearItem = styled.div`
-  width: 70%;
-  display: flex;
-  justify-content: space-between;
-  background-color: #fff;
-  border-bottom: 1px solid black;
-`;
-
 export const MainPage = () => {
   const { user } = useAppSelector((state) => state);
 
@@ -48,10 +40,7 @@ export const MainPage = () => {
       <GearList>
         <h2>My Gear</h2>
         <AddGear />
-        <GearItem>
-          <p>Bike</p>
-          <Button>See more</Button>
-        </GearItem>
+        <GetGears />
       </GearList>
       <User>
         <h3>Logged as</h3>

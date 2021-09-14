@@ -9,15 +9,12 @@ import {
 import React, { useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { generateGearDocument } from "../firebase/Firestore";
+import { IBike } from "../../models/Gears";
 
 export const AddGear = () => {
   const { user } = useAppSelector((state) => state);
   const [open, setOpen] = useState(false);
-  const [bike, setBike] = useState<{
-    name: string;
-    km: number;
-    userId: string;
-  }>({ name: "", userId: user.id, km: 0 });
+  const [bike, setBike] = useState<IBike>({ name: "", userId: user.id, km: 0 });
 
   const toggleOpenPopup = () => {
     setOpen(!open);
