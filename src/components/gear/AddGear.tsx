@@ -9,12 +9,16 @@ import {
 import React, { useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { generateGearDocument } from "../firebase/Firestore";
-import { IBike } from "../../models/Gears";
+import { INewBike } from "../../models/Gears";
 
 export const AddGear = () => {
   const { user } = useAppSelector((state) => state);
   const [open, setOpen] = useState(false);
-  const [bike, setBike] = useState<IBike>({ name: "", userId: user.id, km: 0 });
+  const [bike, setBike] = useState<INewBike>({
+    name: "",
+    userId: user.id,
+    km: 0,
+  });
 
   const toggleOpenPopup = () => {
     setOpen(!open);
@@ -31,7 +35,7 @@ export const AddGear = () => {
     });
   };
   return (
-    <div>
+    <>
       <Button variant="outlined" color="primary" onClick={toggleOpenPopup}>
         Add Bike
       </Button>
@@ -65,6 +69,6 @@ export const AddGear = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };

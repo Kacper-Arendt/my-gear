@@ -1,9 +1,9 @@
-export interface IBike {
+export interface INewBike {
   readonly userId: string;
   name: string;
   km: number;
 }
 
-export interface IFetchedBike extends IBike {
+export interface IBike extends INewBike {
   bikeId: string;
 }

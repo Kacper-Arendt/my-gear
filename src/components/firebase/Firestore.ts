@@ -4,9 +4,11 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   query,
   setDoc,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import { IUser } from "../../models/User";
 import { FirebasePath } from "../../models/Enums";
@@ -56,5 +58,15 @@ export const generateGearDocument = async (gearData: object): Promise<any> => {
 
 export const getDocument = async (path: FirebasePath, id: string) => {
   const docRef = await collection(firestore, path);
-  return await query(docRef, where("userId", "==", id));
+  const request = await query(docRef, where("userId", "==", id));
+  return getDocs(request);
+};
+
+export const updateDocument = async (
+  path: FirebasePath,
+  id: string,
+  data: {}
+) => {
+  const updatedDoc = doc(firestore, path, id);
+  return await setDoc(updatedDoc, data);
 };

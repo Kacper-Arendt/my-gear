@@ -1,11 +1,11 @@
-import { useAppSelector } from "../../redux/hooks";
 import React, { useEffect, useState } from "react";
-import { IFetchedBike } from "../../models/Gears";
-import { getDocument } from "../firebase/Firestore";
-import { FirebasePath } from "../../models/Enums";
-import { getDocs } from "firebase/firestore";
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { IBike, FirebasePath } from "../../models/Models";
+import { getDocument } from "../firebase/Firestore";
+import { addGears } from "../../redux/slice/GearSlice";
+import { useHistory } from "react-router-dom";
 
 const GearItem = styled.div`
   width: 70%;
@@ -16,16 +16,17 @@ const GearItem = styled.div`
 `;
 
 export const GetGears = () => {
-  const { user } = useAppSelector((state) => state);
-  const [bikes, setBikes] = useState<Array<IFetchedBike>>([]);
+  const dispatch = useAppDispatch();
+  const { user, gear } = useAppSelector((state) => state);
+  const [bikes, setBikes] = useState<Array<IBike>>([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     const getGearsHandler = async () => {
       const request = await getDocument(FirebasePath.Gears, user.id);
-      const querySnapshot = await getDocs(request);
 
-      querySnapshot.forEach((doc) => {
+      request.forEach((doc) => {
         const { userId, name, km } = doc.data();
         if (!bikes.some((bike) => bike.bikeId === doc.id)) {
           setBikes((bikes) => [
@@ -39,6 +40,14 @@ export const GetGears = () => {
     getGearsHandler();
   }, []);
 
+  useEffect(() => {
+    dispatch(addGears(bikes));
+  }, [bikes]);
+
+  const redirectToGearItem = (id: string) => {
+    history.push(id);
+  };
+
   return (
     <>
       {loading ? (
@@ -50,7 +59,9 @@ export const GetGears = () => {
               <GearItem key={key}>
                 <p>{el.name}</p>
                 <p>{el.km}</p>
-                <Button>See more</Button>
+                <Button onClick={() => redirectToGearItem(el.bikeId)}>
+                  See more
+                </Button>
               </GearItem>
             );
           })}
