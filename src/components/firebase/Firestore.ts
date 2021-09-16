@@ -9,9 +9,11 @@ import {
   setDoc,
   where,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { IUser } from "../../models/User";
 import { FirebasePath } from "../../models/Enums";
+import { IBike } from "../../models/Gears";
 
 export function firebaseCollection(path: string) {
   return collection(firestore, path);
@@ -50,7 +52,7 @@ export const generateUserDocument = async (
 
 export const generateGearDocument = async (gearData: object): Promise<any> => {
   try {
-    return await addDoc(collection(firestore, FirebasePath.Gears), gearData);
+    return await addDoc(collection(firestore, FirebasePath.Bikes), gearData);
   } catch (error) {
     console.log(error);
   }
@@ -76,5 +78,29 @@ export const updateDocument = async (
     return await updateDoc(dbPath, data);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const docDelete = async (path: FirebasePath, id: string) => {
+  try {
+    await deleteDoc(doc(firestore, path, id));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteBikeComponent = async (
+  bike: IBike,
+  deleteGearName: string
+) => {
+  try {
+    const docRef = doc(firestore, FirebasePath.Bikes, bike.bikeId);
+    await updateDoc(docRef, {
+      components: bike.components.filter(
+        (element) => element.name !== deleteGearName
+      ),
+    });
+  } catch (e) {
+    console.log(e);
   }
 };

@@ -3,8 +3,8 @@ import React from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../redux/hooks";
 import { firebaseSignOut } from "./firebase/Auth";
-import { AddGear } from "./gear/AddGear";
-import { Gears } from "./gear/Gears";
+import { AddBike } from "./gear/bikes/AddBike";
+import { Bike } from "./gear/bikes/Bike";
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,8 +39,8 @@ export const MainPage = () => {
     <Wrapper>
       <GearList>
         <h2>My Gear</h2>
-        <AddGear />
-        <Gears />
+        <AddBike />
+        <Bike />
       </GearList>
       <User>
         <h3>Logged as</h3>

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { IBike, FirebasePath, AppStatus } from "../../models/Models";
-import { getDocument } from "../firebase/Firestore";
-import { addGears } from "../../redux/slice/GearSlice";
+import { useAppSelector } from "../../../redux/hooks";
+import { AppStatus, FirebasePath } from "../../../models/Models";
+import { docDelete } from "../../firebase/Firestore";
 import { useHistory } from "react-router-dom";
-import { useFetchGear } from "./useFetchGear";
+import { useFetchBikes } from "./useFetchBikes";
 
 const GearItem = styled.div`
   width: 70%;
@@ -16,13 +15,17 @@ const GearItem = styled.div`
   border-bottom: 1px solid black;
 `;
 
-export const Gears = () => {
+export const Bike = () => {
   const { app } = useAppSelector((state) => state);
   const history = useHistory();
-  const gears = useFetchGear();
+  const bikes = useFetchBikes();
 
   const redirectToGearItem = (id: string) => {
     history.push(id);
+  };
+
+  const deleteBike = async (id: string) => {
+    await docDelete(FirebasePath.Bikes, id);
   };
 
   return (
@@ -31,11 +34,12 @@ export const Gears = () => {
         <p>Loading...</p>
       ) : (
         <>
-          {gears.map((el, key) => {
+          {bikes.map((el, key) => {
             return (
               <GearItem key={key}>
                 <p>{el.name}</p>
                 <p>{el.km}</p>
+                <Button onClick={() => deleteBike(el.bikeId)}>Delete</Button>
                 <Button onClick={() => redirectToGearItem(el.bikeId)}>
                   See more
                 </Button>

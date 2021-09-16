@@ -7,7 +7,7 @@ import {
   Register,
   UserLogin,
   PrivateRoute,
-  GearItem,
+  BikeItem,
 } from "./components/Components";
 import {
   useAppDispatch,
@@ -102,7 +102,7 @@ function App() {
             />
             <PrivateRoute
               isSignedIn={!!user.isAuth}
-              component={GearItem}
+              component={BikeItem}
               path="/:id"
               exact
             />

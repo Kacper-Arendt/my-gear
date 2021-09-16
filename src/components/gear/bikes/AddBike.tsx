@@ -7,11 +7,11 @@ import {
   TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useAppSelector } from "../../redux/hooks";
-import { generateGearDocument } from "../firebase/Firestore";
-import { INewBike } from "../../models/Gears";
+import { useAppSelector } from "../../../redux/hooks";
+import { generateGearDocument } from "../../firebase/Firestore";
+import { INewBike } from "../../../models/Gears";
 
-export const AddGear = () => {
+export const AddBike = () => {
   const { user } = useAppSelector((state) => state);
   const [open, setOpen] = useState(false);
   const [bike, setBike] = useState<INewBike>({

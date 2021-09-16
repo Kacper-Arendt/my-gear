@@ -7,8 +7,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { updateDocument } from "../../firebase/Firestore";
-import { FirebasePath, IComponent } from "../../../models/Models";
+import { updateDocument } from "../../../firebase/Firestore";
+import { FirebasePath, IComponent } from "../../../../models/Models";
 
 const initValue = {
   name: "",
@@ -37,7 +37,7 @@ export const AddComponent = (props: { gearId: string }) => {
 
   const createItemHandler = async () => {
     setComponents((components) => [...components, component]);
-    await updateDocument(FirebasePath.Gears, props.gearId, {
+    await updateDocument(FirebasePath.Bikes, props.gearId, {
       components: components,
     });
     setComponent((component) => initValue);

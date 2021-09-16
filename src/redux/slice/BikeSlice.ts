@@ -3,15 +3,15 @@ import { IBike } from "../../models/Gears";
 
 const initialState = [] as Array<IBike>;
 
-export const GearSlice = createSlice({
-  name: "gears",
+export const BikeSlice = createSlice({
+  name: "bikes",
   initialState,
   reducers: {
-    addGears(state, action: PayloadAction<Array<IBike>>) {
+    addBikes(state, action: PayloadAction<Array<IBike>>) {
       return action.payload;
     },
   },
 });
 
-export const { addGears } = GearSlice.actions;
-export default GearSlice.reducer;
+export const { addBikes } = BikeSlice.actions;
+export default BikeSlice.reducer;
