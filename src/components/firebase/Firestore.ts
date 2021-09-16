@@ -57,9 +57,13 @@ export const generateGearDocument = async (gearData: object): Promise<any> => {
 };
 
 export const getDocument = async (path: FirebasePath, id: string) => {
-  const docRef = await collection(firestore, path);
-  const request = await query(docRef, where("userId", "==", id));
-  return getDocs(request);
+  try {
+    const docRef = await collection(firestore, path);
+    const request = await query(docRef, where("userId", "==", id));
+    return getDocs(request);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const updateDocument = async (
@@ -67,6 +71,10 @@ export const updateDocument = async (
   id: string,
   data: {}
 ) => {
-  const updatedDoc = doc(firestore, path, id);
-  return await setDoc(updatedDoc, data);
+  try {
+    const dbPath = await doc(firestore, path, id);
+    return await updateDoc(dbPath, data);
+  } catch (error) {
+    console.log(error);
+  }
 };

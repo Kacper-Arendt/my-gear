@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useAppSelector } from "../redux/hooks";
 import { firebaseSignOut } from "./firebase/Auth";
 import { AddGear } from "./gear/AddGear";
-import { GetGears } from "./gear/GetGears";
+import { Gears } from "./gear/Gears";
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ export const MainPage = () => {
       <GearList>
         <h2>My Gear</h2>
         <AddGear />
-        <GetGears />
+        <Gears />
       </GearList>
       <User>
         <h3>Logged as</h3>

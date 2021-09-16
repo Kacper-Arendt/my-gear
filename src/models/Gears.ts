@@ -6,4 +6,15 @@ export interface INewBike {
 
 export interface IBike extends INewBike {
   bikeId: string;
+  components: Array<IComponent>;
+}
+
+export interface IComponent {
+  name: string;
+  type: string;
+  brand: string;
+  model: string;
+  added: string;
+  distance: number;
+  notes?: string;
 }

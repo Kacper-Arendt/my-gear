@@ -8,30 +8,21 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { updateDocument } from "../../firebase/Firestore";
-import { FirebasePath } from "../../../models/Enums";
-import { useAppSelector } from "../../../redux/hooks";
+import { FirebasePath, IComponent } from "../../../models/Models";
 
-interface IComponent {
-  name: string;
-  type: string;
-  brand: string;
-  model: string;
-  added: string;
-  distance: number;
-  notes?: string;
-}
+const initValue = {
+  name: "",
+  type: "",
+  brand: "",
+  model: "",
+  added: "",
+  distance: 0,
+};
 
-export const AddComponent = () => {
-  const { user } = useAppSelector((state) => state);
+export const AddComponent = (props: { gearId: string }) => {
   const [open, setOpen] = useState(false);
-  const [component, setComponent] = useState<IComponent>({
-    name: "",
-    type: "",
-    brand: "",
-    model: "",
-    added: "",
-    distance: 0,
-  });
+  const [component, setComponent] = useState<IComponent>(initValue);
+  const [components, setComponents] = useState<Array<IComponent>>([]);
 
   const toggleOpenPopup = () => {
     setOpen(!open);
@@ -45,7 +36,11 @@ export const AddComponent = () => {
   };
 
   const createItemHandler = async () => {
-    updateDocument(FirebasePath.Gears, user.id, component);
+    setComponents((components) => [...components, component]);
+    await updateDocument(FirebasePath.Gears, props.gearId, {
+      components: components,
+    });
+    setComponent((component) => initValue);
     setOpen(false);
   };
   return (
@@ -85,12 +80,14 @@ export const AddComponent = () => {
             name="distance"
             label="Distance"
             type="number"
+            defaultValue={0}
             onChange={handleChange}
           />
           <TextField
             label="Added"
             name="added"
             type="date"
+            defaultValue="2021-11-21"
             onChange={handleChange}
             InputLabelProps={{
               shrink: true,

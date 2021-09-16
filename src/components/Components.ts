@@ -5,4 +5,4 @@ export * from "./Auth/routes/PrivateRoute";
 export * from "./MainPage";
 export * from "./gear/GearItem";
 export * from "./gear/AddGear";
-export * from "./gear/GetGears";
+export * from "./gear/Gears";
