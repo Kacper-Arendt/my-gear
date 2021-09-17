@@ -6,17 +6,33 @@ import { AddComponent } from "./component/AddComponent";
 import styled from "styled-components";
 import { useFetchBikes } from "./useFetchBikes";
 import { deleteBikeComponent } from "../../firebase/Firestore";
-import { Heading, Table, Tbody, Td } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 
 const BikeDetails = styled.div`
   width: 40rem;
   margin: 2rem 0 0 2rem;
+
   h1 {
     text-transform: capitalize;
   }
 `;
+const Components = styled.div`
+  width: 50rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+`;
 
-const StyledComponent = styled.div`
+const Component = styled.div`
   display: flex;
   gap: 1rem;
 `;
@@ -66,29 +82,52 @@ export const BikeItem = () => {
               </Tbody>
             </Table>
           </BikeDetails>
-          <div>
-            <h3>Components</h3>
-            {item.components &&
-              item.components.map((el, key) => {
-                return (
-                  <StyledComponent key={key}>
-                    <p>{el.name}</p>
-                    <p>{el.type}</p>
-                    <p>{el.brand}</p>
-                    <p>{el.model}</p>
-                    <p>{el.added}</p>
-                    <p>{el.distance}</p>
-                    <p>{el.notes}</p>
-                    <button onClick={() => deleteComponent(el.name)}>
-                      delete
-                    </button>
-                  </StyledComponent>
-                );
-              })}
-          </div>
+          <Components>
+            <h3>Components</h3> <AddComponent gearId={id} />
+            <Table size="sm">
+              <Thead bgColor="grey">
+                <Tr>
+                  <Th color="white">Name</Th>
+                  <Th color="white">Type</Th>
+                  <Th color="white">Brand</Th>
+                  <Th color="white">Model</Th>
+                  <Th color="white">Distance</Th>
+                  <Th color="white">Added</Th>
+                  <Th color="white">Notes</Th>
+                  <Th color="white">Action</Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {item.components &&
+                  item.components.map((el, key) => {
+                    return (
+                      <Tr>
+                        <Td>{el.name}</Td>
+                        <Td>{el.type}</Td>
+                        <Td>{el.brand}</Td>
+                        <Td>{el.model}</Td>
+                        <Td>{el.distance}</Td>
+                        <Td>{el.added}</Td>
+                        <Td>{el.notes}</Td>
+                        <Td>
+                          <Button
+                            size="sm"
+                            colorScheme="teal"
+                            variant="ghost"
+                            onClick={() => deleteComponent(el.name)}
+                          >
+                            Delete
+                          </Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+              </Tbody>
+            </Table>
+          </Components>
         </>
       )}
-      <AddComponent gearId={id} />
     </>
   );
 };
