@@ -8,11 +8,18 @@ import { useHistory } from "react-router-dom";
 import { useFetchBikes } from "./useFetchBikes";
 
 const GearItem = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: #fff;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid grey;
+
+  button {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    text-transform: capitalize;
+  }
 `;
 
 export const Bikes = () => {
@@ -38,11 +45,19 @@ export const Bikes = () => {
             return (
               <GearItem key={key}>
                 <p>{el.name}</p>
-                <p>{el.km}</p>
-                <Button size="sm" onClick={() => deleteBike(el.bikeId)}>
+                <p>{el.km}km</p>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() => deleteBike(el.bikeId)}
+                >
                   Delete
                 </Button>
-                <Button size="sm" onClick={() => redirectToBike(el.bikeId)}>
+                <Button
+                  size="sm"
+                  colorScheme="teal"
+                  onClick={() => redirectToBike(el.bikeId)}
+                >
                   See more
                 </Button>
               </GearItem>

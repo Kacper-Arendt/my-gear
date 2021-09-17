@@ -20,6 +20,13 @@ const StyledButton = styled(Button)`
   height: 2rem;
 `;
 
+const StyledInput = styled(Input)`
+  margin: 0.5rem;
+`;
+const StyledTa = styled(Textarea)`
+  margin: 0.5rem;
+`;
+
 export const AddBike = () => {
   const { user } = useAppSelector((state) => state);
   const [open, setOpen] = useState(false);
@@ -58,37 +65,37 @@ export const AddBike = () => {
           <ModalHeader>Add your bike</ModalHeader>
           <ModalBody pb={6}>
             <FormControl mt={4}>
-              <Input
+              <StyledInput
                 name="name"
                 type="text"
                 onChange={handleChange}
                 placeholder="Bike Name"
               />{" "}
-              <Input
+              <StyledInput
                 name="brand"
                 type="text"
                 onChange={handleChange}
                 placeholder="Brand"
               />{" "}
-              <Input
+              <StyledInput
                 name="model"
                 type="text"
                 onChange={handleChange}
                 placeholder="Model"
               />{" "}
-              <Input
+              <StyledInput
                 name="weight"
                 type="number"
                 onChange={handleChange}
                 placeholder="Weight"
               />
-              <Input
+              <StyledInput
                 name="km"
                 type="number"
                 onChange={handleChange}
                 placeholder="Kilometers traveled"
               />{" "}
-              <Textarea
+              <StyledTa
                 name="notes"
                 onChange={handleChange}
                 placeholder="Notes"

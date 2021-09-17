@@ -42,7 +42,7 @@ export const MainPage = () => {
         <Heading as="h3">Logged as</Heading>
         <p>User: {user.name}</p>
         <p>mail: {user.email}</p>
-        <Button colorScheme="green" size="sm" onClick={firebaseSignOut}>
+        <Button colorScheme="teal" size="sm" onClick={firebaseSignOut}>
           Sign Out
         </Button>
       </User>
