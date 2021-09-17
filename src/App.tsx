@@ -1,12 +1,27 @@
-import React, {useEffect} from 'react';
-import {BrowserRouter as Router, Switch} from "react-router-dom";
-import {createGlobalStyle} from 'styled-components'
-import {AuthRoute, HomePage, Register, UserLogin, PrivateRoute} from "./components/Components";
-import {useAppDispatch, useAppSelector, changeStatus, login} from "./redux/ReduxComponents";
-import {AppStatus} from "./models/Models";
-import {User} from "firebase/auth";
-import {firebaseOnUserChange, getUserDocument} from './components/firebase/Firebase';
-
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
+import {
+  AuthRoute,
+  MainPage,
+  Register,
+  UserLogin,
+  PrivateRoute,
+  BikeItem,
+} from "./components/Components";
+import {
+  useAppDispatch,
+  useAppSelector,
+  changeStatus,
+  login,
+} from "./redux/ReduxComponents";
+import { AppStatus } from "./models/Models";
+import { User } from "firebase/auth";
+import {
+  firebaseOnUserChange,
+  getUserDocument,
+} from "./components/firebase/Firebase";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -34,40 +49,71 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     letter-spacing: 1.4px;
   }
-`
+`;
 
 function App() {
-    const dispatch = useAppDispatch();
-    const {app, user} = useAppSelector(state => state);
+  const dispatch = useAppDispatch();
+  const { app, user } = useAppSelector((state) => state);
 
-    useEffect(() => {
-        return firebaseOnUserChange(async (user: User | null) => {
-            if (user) {
-                const response = await getUserDocument(user.uid);
-                if (response){
-                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}));
-                }
-            } else {
-                console.log('User not found');
-            }
-            dispatch(changeStatus(AppStatus.Idle))
-        });
-    }, [dispatch]);
+  useEffect(() => {
+    return firebaseOnUserChange(async (user: User | null) => {
+      if (user) {
+        const response = await getUserDocument(user.uid);
+        if (response) {
+          dispatch(
+            login({
+              id: response.id,
+              email: response.email,
+              name: response.name,
+              isAuth: true,
+            })
+          );
+        }
+      } else {
+        console.log("User not found");
+      }
+      dispatch(changeStatus(AppStatus.Idle));
+    });
+  }, [dispatch]);
 
-    return (
-        <>
-            <GlobalStyles/>
-            <Router>
-                {app.status === AppStatus.Loading ? <h2>Loading...</h2> :
-                    <Switch>
-                        <AuthRoute component={UserLogin} isSignedIn={!!user.isAuth} path='/login'/>
-                        <AuthRoute component={Register} isSignedIn={!!user.isAuth} path='/register' exact/>
-                        <PrivateRoute isSignedIn={!!user.isAuth} component={HomePage} path='/'/>
-                    </Switch>
-                }
-            </Router>
-        </>
-    );
+  return (
+    <>
+      <GlobalStyles />
+      <ChakraProvider>
+        <Router>
+          {app.status === AppStatus.Loading ? (
+            <h2>Loading...</h2>
+          ) : (
+            <Switch>
+              <AuthRoute
+                component={UserLogin}
+                isSignedIn={!!user.isAuth}
+                path="/login"
+              />
+              <AuthRoute
+                component={Register}
+                isSignedIn={!!user.isAuth}
+                path="/register"
+                exact
+              />
+              <PrivateRoute
+                isSignedIn={!!user.isAuth}
+                component={MainPage}
+                path="/"
+                exact
+              />
+              <PrivateRoute
+                isSignedIn={!!user.isAuth}
+                component={BikeItem}
+                path="/:id"
+                exact
+              />
+            </Switch>
+          )}
+        </Router>
+      </ChakraProvider>
+    </>
+  );
 }
 
 export default App;
