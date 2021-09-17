@@ -30,11 +30,17 @@ const Components = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-`;
-
-const Component = styled.div`
-  display: flex;
+  margin: 2rem;
+  align-items: center;
   gap: 1rem;
+
+  td {
+    text-align: center;
+  }
+
+  h2 {
+    font-weight: lighter;
+  }
 `;
 
 export const BikeItem = () => {
@@ -83,7 +89,8 @@ export const BikeItem = () => {
             </Table>
           </BikeDetails>
           <Components>
-            <h3>Components</h3> <AddComponent gearId={id} />
+            <Heading as="h2">Components</Heading>
+            <AddComponent gearId={id} />
             <Table size="sm">
               <Thead bgColor="grey">
                 <Tr>
@@ -107,7 +114,7 @@ export const BikeItem = () => {
                         <Td>{el.type}</Td>
                         <Td>{el.brand}</Td>
                         <Td>{el.model}</Td>
-                        <Td>{el.distance}</Td>
+                        <Td>{el.distance}km</Td>
                         <Td>{el.added}</Td>
                         <Td>{el.notes}</Td>
                         <Td>

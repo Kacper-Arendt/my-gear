@@ -13,6 +13,14 @@ import {
 import React, { useState } from "react";
 import { updateDocument } from "../../../firebase/Firestore";
 import { FirebasePath, IComponent } from "../../../../models/Models";
+import styled from "styled-components";
+
+const StyledInput = styled(Input)`
+  margin: 0.5rem;
+`;
+const StyledTa = styled(Textarea)`
+  margin: 0.5rem;
+`;
 
 const initValue = {
   name: "",
@@ -51,51 +59,51 @@ export const AddComponent = (props: { gearId: string }) => {
   return (
     <>
       <Button colorScheme="green" size="sm" onClick={toggleOpenPopup}>
-        Add Component
+        Add
       </Button>
-      <Modal isOpen={open} onClose={toggleOpenPopup}>
+      <Modal size="sm" isOpen={open} onClose={toggleOpenPopup}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add component</ModalHeader>
           <ModalBody pb={6}>
             <FormControl mt={4}>
-              <Input
+              <StyledInput
                 name="name"
                 type="text"
                 onChange={handleChange}
                 placeholder="Name"
               />
-              <Input
+              <StyledInput
                 name="type"
                 type="text"
                 onChange={handleChange}
                 placeholder="Type"
               />
-              <Input
+              <StyledInput
                 name="brand"
                 type="text"
                 onChange={handleChange}
                 placeholder="Brand"
               />{" "}
-              <Input
+              <StyledInput
                 name="model"
                 type="text"
                 onChange={handleChange}
                 placeholder="Model"
               />{" "}
-              <Input
+              <StyledInput
                 name="distance"
                 type="number"
                 onChange={handleChange}
                 placeholder="Distance"
               />{" "}
-              <Input
-                name="Added"
+              <StyledInput
+                name="added"
                 type="date"
                 onChange={handleChange}
                 placeholder="Added"
               />{" "}
-              <Textarea
+              <StyledTa
                 name="notes"
                 onChange={handleChange}
                 placeholder="Notes"
