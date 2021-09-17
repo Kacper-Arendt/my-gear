@@ -1,15 +1,24 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from "@material-ui/core";
 import React, { useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { generateGearDocument } from "../../firebase/Firestore";
 import { INewBike } from "../../../models/Gears";
+import styled from "styled-components";
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  FormControl,
+  Input,
+  ModalFooter,
+  Textarea,
+} from "@chakra-ui/react";
+
+const StyledButton = styled(Button)`
+  height: 2rem;
+`;
 
 export const AddBike = () => {
   const { user } = useAppSelector((state) => state);
@@ -18,6 +27,10 @@ export const AddBike = () => {
     name: "",
     userId: user.id,
     km: 0,
+    brand: "",
+    model: "",
+    weight: 0,
+    notes: "",
   });
 
   const toggleOpenPopup = () => {
@@ -36,39 +49,67 @@ export const AddBike = () => {
   };
   return (
     <>
-      <Button variant="outlined" color="primary" onClick={toggleOpenPopup}>
-        Add Bike
-      </Button>
-      <Dialog open={open} onClose={toggleOpenPopup}>
-        <DialogTitle>Add Bike</DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            label="Bike Name"
-            type="text"
-            fullWidth
-            autoComplete="off"
-            name="name"
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="km"
-            label="kilometers traveled"
-            type="number"
-            fullWidth
-            onChange={handleChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={createItemHandler} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <StyledButton colorScheme="green" size="sm" onClick={toggleOpenPopup}>
+        Add
+      </StyledButton>
+      <Modal isOpen={open} onClose={toggleOpenPopup}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add your bike</ModalHeader>
+          <ModalBody pb={6}>
+            <FormControl mt={4}>
+              <Input
+                name="name"
+                type="text"
+                onChange={handleChange}
+                placeholder="Bike Name"
+              />{" "}
+              <Input
+                name="brand"
+                type="text"
+                onChange={handleChange}
+                placeholder="Brand"
+              />{" "}
+              <Input
+                name="model"
+                type="text"
+                onChange={handleChange}
+                placeholder="Model"
+              />{" "}
+              <Input
+                name="weight"
+                type="number"
+                onChange={handleChange}
+                placeholder="Weight"
+              />
+              <Input
+                name="km"
+                type="number"
+                onChange={handleChange}
+                placeholder="Kilometers traveled"
+              />{" "}
+              <Textarea
+                name="notes"
+                onChange={handleChange}
+                placeholder="Notes"
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              size="sm"
+              margin={4}
+              colorScheme="red"
+              onClick={toggleOpenPopup}
+            >
+              Cancel
+            </Button>
+            <Button size="sm" colorScheme="green" onClick={createItemHandler}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

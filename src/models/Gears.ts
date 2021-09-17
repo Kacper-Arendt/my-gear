@@ -2,6 +2,10 @@ export interface INewBike {
   readonly userId: string;
   name: string;
   km: number;
+  brand: string;
+  model: string;
+  notes: string;
+  weight: number;
 }
 
 export interface IBike extends INewBike {

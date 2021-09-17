@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useAppSelector } from "../../../redux/hooks";
 import { AppStatus, FirebasePath } from "../../../models/Models";
@@ -15,12 +15,12 @@ const GearItem = styled.div`
   border-bottom: 1px solid black;
 `;
 
-export const Bike = () => {
+export const Bikes = () => {
   const { app } = useAppSelector((state) => state);
   const history = useHistory();
   const bikes = useFetchBikes();
 
-  const redirectToGearItem = (id: string) => {
+  const redirectToBike = (id: string) => {
     history.push(id);
   };
 
@@ -39,8 +39,10 @@ export const Bike = () => {
               <GearItem key={key}>
                 <p>{el.name}</p>
                 <p>{el.km}</p>
-                <Button onClick={() => deleteBike(el.bikeId)}>Delete</Button>
-                <Button onClick={() => redirectToGearItem(el.bikeId)}>
+                <Button size="sm" onClick={() => deleteBike(el.bikeId)}>
+                  Delete
+                </Button>
+                <Button size="sm" onClick={() => redirectToBike(el.bikeId)}>
                   See more
                 </Button>
               </GearItem>

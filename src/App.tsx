@@ -21,6 +21,7 @@ import {
   firebaseOnUserChange,
   getUserDocument,
 } from "./components/firebase/Firebase";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -78,37 +79,39 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      <Router>
-        {app.status === AppStatus.Loading ? (
-          <h2>Loading...</h2>
-        ) : (
-          <Switch>
-            <AuthRoute
-              component={UserLogin}
-              isSignedIn={!!user.isAuth}
-              path="/login"
-            />
-            <AuthRoute
-              component={Register}
-              isSignedIn={!!user.isAuth}
-              path="/register"
-              exact
-            />
-            <PrivateRoute
-              isSignedIn={!!user.isAuth}
-              component={MainPage}
-              path="/"
-              exact
-            />
-            <PrivateRoute
-              isSignedIn={!!user.isAuth}
-              component={BikeItem}
-              path="/:id"
-              exact
-            />
-          </Switch>
-        )}
-      </Router>
+      <ChakraProvider>
+        <Router>
+          {app.status === AppStatus.Loading ? (
+            <h2>Loading...</h2>
+          ) : (
+            <Switch>
+              <AuthRoute
+                component={UserLogin}
+                isSignedIn={!!user.isAuth}
+                path="/login"
+              />
+              <AuthRoute
+                component={Register}
+                isSignedIn={!!user.isAuth}
+                path="/register"
+                exact
+              />
+              <PrivateRoute
+                isSignedIn={!!user.isAuth}
+                component={MainPage}
+                path="/"
+                exact
+              />
+              <PrivateRoute
+                isSignedIn={!!user.isAuth}
+                component={BikeItem}
+                path="/:id"
+                exact
+              />
+            </Switch>
+          )}
+        </Router>
+      </ChakraProvider>
     </>
   );
 }

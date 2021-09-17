@@ -5,4 +5,5 @@ export * from "./Auth/routes/PrivateRoute";
 export * from "./MainPage";
 export * from "./gear/bikes/BikeItem";
 export * from "./gear/bikes/AddBike";
-export * from "./gear/bikes/Bike";
+export * from "./gear/bikes/Bikes";
+export * from "./gear/bikes/BikesComponent";

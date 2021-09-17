@@ -11,11 +11,12 @@ export const useFetchBikes = () => {
   const { user } = useAppSelector((state) => state);
   const [bikes, setBikes] = useState<Array<IBike>>([]);
 
-  const getGearsHandler = async () => {
+  const getBikesHandler = async () => {
     const request = await getDocument(FirebasePath.Bikes, user.id);
     if (request) {
       request.forEach((doc) => {
-        const { userId, name, km, components } = doc.data();
+        const { userId, name, km, components, model, weight, brand, notes } =
+          doc.data();
         if (!bikes.some((bike) => bike.bikeId === doc.id)) {
           setBikes((bikes) => [
             ...bikes,
@@ -24,6 +25,10 @@ export const useFetchBikes = () => {
               name: name,
               userId: userId,
               bikeId: doc.id,
+              model: model,
+              weight: weight,
+              brand: brand,
+              notes: notes,
               components: components,
             },
           ]);
@@ -34,7 +39,7 @@ export const useFetchBikes = () => {
   };
 
   useEffect(() => {
-    getGearsHandler();
+    getBikesHandler();
   }, []);
 
   useEffect(() => {

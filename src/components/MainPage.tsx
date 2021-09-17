@@ -1,10 +1,9 @@
-import { Button } from "@material-ui/core";
+import { Button, Heading } from "@chakra-ui/react";
 import React from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../redux/hooks";
 import { firebaseSignOut } from "./firebase/Auth";
-import { AddBike } from "./gear/bikes/AddBike";
-import { Bike } from "./gear/bikes/Bike";
+import { BikesComponent } from "./Components";
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,16 +18,14 @@ const User = styled.div`
 `;
 const GearList = styled.div`
   width: 60%;
-  background-color: #f8f8f8;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  padding: 2rem 1rem;
 
-  h2 {
-    width: 40%;
-  }
-
-  button {
+  h1 {
+    width: 100%;
+    margin: 1rem 0 2rem;
   }
 `;
 
@@ -38,15 +35,16 @@ export const MainPage = () => {
   return (
     <Wrapper>
       <GearList>
-        <h2>My Gear</h2>
-        <AddBike />
-        <Bike />
+        <Heading as="h1">My Gear</Heading>
+        <BikesComponent />
       </GearList>
       <User>
-        <h3>Logged as</h3>
+        <Heading as="h3">Logged as</Heading>
         <p>User: {user.name}</p>
         <p>mail: {user.email}</p>
-        <Button onClick={firebaseSignOut}>Sign Out</Button>
+        <Button colorScheme="green" size="sm" onClick={firebaseSignOut}>
+          Sign Out
+        </Button>
       </User>
     </Wrapper>
   );
