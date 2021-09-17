@@ -83,7 +83,7 @@ export const BikeItem = () => {
                 <Td>{item.weight}kg</Td>
               </Tbody>
               <Tbody>
-                <Td>Notes</Td>
+                <Td>Notes</Td>git
                 <Td>{item.notes}</Td>
               </Tbody>
             </Table>
@@ -92,7 +92,7 @@ export const BikeItem = () => {
             <Heading as="h2">Components</Heading>
             <AddComponent gearId={id} />
             <Table size="sm">
-              <Thead bgColor="grey">
+              <Thead bgColor="teal">
                 <Tr>
                   <Th color="white">Name</Th>
                   <Th color="white">Type</Th>
