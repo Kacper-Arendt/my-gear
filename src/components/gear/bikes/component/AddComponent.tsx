@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { updateDocument } from "../../../firebase/Firestore";
-import { FirebasePath, IComponent } from "../../../../models/Models";
+import { FirebasePath, IBike, IComponent } from "../../../../models/Models";
 import styled from "styled-components";
 
 const StyledInput = styled(Input)`
@@ -31,8 +31,9 @@ const initValue = {
   distance: 0,
 };
 
-export const AddComponent = (props: { gearId: string }) => {
+export const AddComponent = (props: { bike: IBike }) => {
   const [open, setOpen] = useState(false);
+  const [isConfirm, setConfirm] = useState(false);
   const [component, setComponent] = useState<IComponent>(initValue);
   const [components, setComponents] = useState<Array<IComponent>>([]);
 
@@ -47,13 +48,22 @@ export const AddComponent = (props: { gearId: string }) => {
     });
   };
 
+  const saveData = () => {
+    setComponents((components) => [
+      ...components,
+      component,
+      ...props.bike.components,
+    ]);
+    setConfirm(true);
+  };
+
   const createItemHandler = async () => {
-    setComponents((components) => [...components, component]);
-    await updateDocument(FirebasePath.Bikes, props.gearId, {
+    await updateDocument(FirebasePath.Bikes, props.bike.bikeId, {
       components: components,
     });
     setComponent((component) => initValue);
     setOpen(false);
+    setConfirm(false);
   };
 
   return (
@@ -120,8 +130,36 @@ export const AddComponent = (props: { gearId: string }) => {
             >
               Cancel
             </Button>
-            <Button size="sm" colorScheme="green" onClick={createItemHandler}>
+            <Button size="sm" colorScheme="green" onClick={saveData}>
               Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal size="sm" isOpen={isConfirm} onClose={toggleOpenPopup}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Are you sure?</ModalHeader>
+          <ModalBody>
+            <p>Name: {component.name}</p>
+            <p>Type: {component.type}</p>
+            <p>Brand: {component.brand}</p>
+            <p>Model: {component.model}</p>
+            <p>Distance: {component.distance}</p>
+            <p>Added: {component.added}</p>
+            <p>Notes: {component.notes}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              size="sm"
+              margin={4}
+              colorScheme="red"
+              onClick={() => setConfirm(false)}
+            >
+              Go back
+            </Button>
+            <Button size="sm" colorScheme="green" onClick={createItemHandler}>
+              Confirm
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -90,7 +90,7 @@ export const BikeItem = () => {
           </BikeDetails>
           <Components>
             <Heading as="h2">Components</Heading>
-            <AddComponent gearId={id} />
+            <AddComponent bike={item} />
             <Table size="sm">
               <Thead bgColor="teal">
                 <Tr>
