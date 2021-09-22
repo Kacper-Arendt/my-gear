@@ -5,12 +5,13 @@ import { Heading } from "@chakra-ui/react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  gap: 2rem 1rem;
+  gap: 2rem;
 
   h3 {
     font-weight: lighter;

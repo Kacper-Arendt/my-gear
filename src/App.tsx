@@ -15,7 +15,7 @@ import {
   changeStatus,
   login,
 } from "./redux/ReduxComponents";
-import { AppStatus } from "./models/Models";
+import { AppStatus, device } from "./models/Models";
 import { User } from "firebase/auth";
 import {
   firebaseOnUserChange,
@@ -36,7 +36,16 @@ const GlobalStyles = createGlobalStyle`
     font-size: 62.5%;
     width: 100%;
     height: 100%;
+
+  @media${device.tablet} {
+    font-size: 71.25%;
+  } @media${device.laptop} {
+    font-size: 81.25%;
+  } @media${device.desktop} {
+    font-size: 91.25%;
   }
+  }
+    
 
   :root {
     --color-background: #F2F0D5;
