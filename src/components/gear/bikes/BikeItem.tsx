@@ -10,9 +10,21 @@ import { Button, Heading } from "@chakra-ui/react";
 import { Line } from "../../UI/Line";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { device } from "../../../models/Models";
+
+const Wrapper = styled.div`
+  width: 100%;
+  max-width: 100rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 0 2rem;
+`;
 
 const BikeDetails = styled.div`
   margin: 2rem 0 0 2rem;
+  width: 90%;
+  max-width: 50rem;
 
   h1 {
     text-transform: capitalize;
@@ -21,28 +33,48 @@ const BikeDetails = styled.div`
 `;
 
 const Detail = styled.div`
-  width: 50%;
+  width: 70%;
   display: flex;
   justify-content: space-between;
 `;
 
 const Components = styled.div`
-  width: 70%;
+  max-width: 60rem;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-
   text-align: center;
   text-transform: capitalize;
-
-  tbody {
-    border: none;
-  }
-
   h2 {
     font-weight: lighter;
+  }
+
+  @media${device.laptop} {
+    max-width: 90rem;
+  }
+`;
+
+const StyledTable = styled(Table)`
+  width: 80%;
+  margin: auto;
+
+  thead {
+    background-color: aquamarine;
+  }
+
+  td {
+    margin: 0.5rem 0;
+  }
+
+  @media${device.mobileM} {
+    width: 100%;
+    margin: 0;
+
+    td {
+      margin: 1rem 0.5rem;
+    }
   }
 `;
 
@@ -73,7 +105,7 @@ export const BikeItem = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       {item && (
         <>
           <BikeDetails>
@@ -84,23 +116,23 @@ export const BikeItem = () => {
             </Detail>
             <Line margin=".5rem" />
             <Detail>
-              <p>Brand</p>
+              <p>Model</p>
               <p>{item.model}</p>
             </Detail>
             <Line margin=".5rem" />
             <Detail>
-              <p>Brand</p>
-              <p>{item.km}</p>
+              <p>Distance</p>
+              <p>{item.km}km</p>
             </Detail>
             <Line margin=".5rem" />
 
             <Detail>
-              <p>Brand</p>
-              <p>{item.weight}</p>
+              <p>Weight</p>
+              <p>{item.weight}kg</p>
             </Detail>
             <Line margin=".5rem" />
             <Detail>
-              <p>Brand</p>
+              <p>Notes</p>
               <p>{item.notes}</p>
             </Detail>
             <Line margin=".5rem" />
@@ -108,7 +140,7 @@ export const BikeItem = () => {
           <Components>
             <Heading as="h2">Components</Heading>
             <AddComponent bike={item} />
-            <Table>
+            <StyledTable>
               <Thead>
                 <Tr>
                   {columns.map((column, key) => {
@@ -142,10 +174,10 @@ export const BikeItem = () => {
                     );
                   })}
               </Tbody>
-            </Table>
+            </StyledTable>
           </Components>
         </>
       )}
-    </>
+    </Wrapper>
   );
 };
