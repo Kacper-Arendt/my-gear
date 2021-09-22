@@ -6,40 +6,75 @@ import { AddComponent } from "./component/AddComponent";
 import styled from "styled-components";
 import { useFetchBikes } from "./useFetchBikes";
 import { deleteBikeComponent } from "../../firebase/Firestore";
-import {
-  Button,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button, Heading } from "@chakra-ui/react";
+import { Line } from "../../UI/Line";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import { device } from "../../../models/Models";
+
+const Wrapper = styled.div`
+  width: 100%;
+  max-width: 100rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 0 2rem;
+`;
 
 const BikeDetails = styled.div`
-  width: 40rem;
   margin: 2rem 0 0 2rem;
+  width: 90%;
+  max-width: 50rem;
 
   h1 {
     text-transform: capitalize;
+    margin: 1rem 0;
   }
 `;
+
+const Detail = styled.div`
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 const Components = styled.div`
-  width: 50rem;
+  max-width: 60rem;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 2rem;
   align-items: center;
   gap: 1rem;
-
-  td {
-    text-align: center;
-  }
-
+  text-align: center;
+  text-transform: capitalize;
   h2 {
     font-weight: lighter;
+  }
+
+  @media${device.laptop} {
+    max-width: 90rem;
+  }
+`;
+
+const StyledTable = styled(Table)`
+  width: 80%;
+  margin: auto;
+
+  thead {
+    background-color: aquamarine;
+  }
+
+  td {
+    margin: 0.5rem 0;
+  }
+
+  @media${device.mobileM} {
+    width: 100%;
+    margin: 0;
+
+    td {
+      margin: 1rem 0.5rem;
+    }
   }
 `;
 
@@ -47,6 +82,16 @@ export const BikeItem = () => {
   const { bike } = useAppSelector((state) => state);
   const { id }: { id: string } = useParams();
   const [item, setItem] = useState<IBike>();
+  const columns = [
+    "Name",
+    "Type",
+    "Brand",
+    "Model",
+    "Distance",
+    "Added",
+    "Notes",
+    "Action",
+  ];
   useFetchBikes();
 
   useEffect(() => {
@@ -60,56 +105,54 @@ export const BikeItem = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       {item && (
         <>
           <BikeDetails>
-            <Table variant="simple">
-              <Heading as="h1">{item.name}</Heading>
-              <Tbody>
-                <Td>Brand</Td>
-                <Td>{item.brand}</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Model</Td>
-                <Td>{item.model}</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Distance </Td>
-                <Td>{item.km}km</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Weight</Td>
-                <Td>{item.weight}kg</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Notes</Td>git
-                <Td>{item.notes}</Td>
-              </Tbody>
-            </Table>
+            <Heading as="h1">{item.name}</Heading>
+            <Detail>
+              <p>Brand</p>
+              <p>{item.brand}</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Model</p>
+              <p>{item.model}</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Distance</p>
+              <p>{item.km}km</p>
+            </Detail>
+            <Line margin=".5rem" />
+
+            <Detail>
+              <p>Weight</p>
+              <p>{item.weight}kg</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Notes</p>
+              <p>{item.notes}</p>
+            </Detail>
+            <Line margin=".5rem" />
           </BikeDetails>
           <Components>
             <Heading as="h2">Components</Heading>
             <AddComponent bike={item} />
-            <Table size="sm">
-              <Thead bgColor="teal">
+            <StyledTable>
+              <Thead>
                 <Tr>
-                  <Th color="white">Name</Th>
-                  <Th color="white">Type</Th>
-                  <Th color="white">Brand</Th>
-                  <Th color="white">Model</Th>
-                  <Th color="white">Distance</Th>
-                  <Th color="white">Added</Th>
-                  <Th color="white">Notes</Th>
-                  <Th color="white">Action</Th>
-                  <Th></Th>
+                  {columns.map((column, key) => {
+                    return <Th key={key}>{column}</Th>;
+                  })}
                 </Tr>
               </Thead>
               <Tbody>
                 {item.components &&
                   item.components.map((el, key) => {
                     return (
-                      <Tr>
+                      <Tr key={key}>
                         <Td>{el.name}</Td>
                         <Td>{el.type}</Td>
                         <Td>{el.brand}</Td>
@@ -131,10 +174,10 @@ export const BikeItem = () => {
                     );
                   })}
               </Tbody>
-            </Table>
+            </StyledTable>
           </Components>
         </>
       )}
-    </>
+    </Wrapper>
   );
 };
