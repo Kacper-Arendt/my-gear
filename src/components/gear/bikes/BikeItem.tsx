@@ -6,36 +6,39 @@ import { AddComponent } from "./component/AddComponent";
 import styled from "styled-components";
 import { useFetchBikes } from "./useFetchBikes";
 import { deleteBikeComponent } from "../../firebase/Firestore";
-import {
-  Button,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button, Heading } from "@chakra-ui/react";
+import { Line } from "../../UI/Line";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 const BikeDetails = styled.div`
-  width: 40rem;
   margin: 2rem 0 0 2rem;
 
   h1 {
     text-transform: capitalize;
+    margin: 1rem 0;
   }
 `;
+
+const Detail = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 const Components = styled.div`
-  width: 50rem;
+  width: 70%;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 2rem;
   align-items: center;
   gap: 1rem;
 
-  td {
-    text-align: center;
+  text-align: center;
+  text-transform: capitalize;
+
+  tbody {
+    border: none;
   }
 
   h2 {
@@ -47,6 +50,16 @@ export const BikeItem = () => {
   const { bike } = useAppSelector((state) => state);
   const { id }: { id: string } = useParams();
   const [item, setItem] = useState<IBike>();
+  const columns = [
+    "Name",
+    "Type",
+    "Brand",
+    "Model",
+    "Distance",
+    "Added",
+    "Notes",
+    "Action",
+  ];
   useFetchBikes();
 
   useEffect(() => {
@@ -64,52 +77,50 @@ export const BikeItem = () => {
       {item && (
         <>
           <BikeDetails>
-            <Table variant="simple">
-              <Heading as="h1">{item.name}</Heading>
-              <Tbody>
-                <Td>Brand</Td>
-                <Td>{item.brand}</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Model</Td>
-                <Td>{item.model}</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Distance </Td>
-                <Td>{item.km}km</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Weight</Td>
-                <Td>{item.weight}kg</Td>
-              </Tbody>
-              <Tbody>
-                <Td>Notes</Td>git
-                <Td>{item.notes}</Td>
-              </Tbody>
-            </Table>
+            <Heading as="h1">{item.name}</Heading>
+            <Detail>
+              <p>Brand</p>
+              <p>{item.brand}</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Brand</p>
+              <p>{item.model}</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Brand</p>
+              <p>{item.km}</p>
+            </Detail>
+            <Line margin=".5rem" />
+
+            <Detail>
+              <p>Brand</p>
+              <p>{item.weight}</p>
+            </Detail>
+            <Line margin=".5rem" />
+            <Detail>
+              <p>Brand</p>
+              <p>{item.notes}</p>
+            </Detail>
+            <Line margin=".5rem" />
           </BikeDetails>
           <Components>
             <Heading as="h2">Components</Heading>
             <AddComponent bike={item} />
-            <Table size="sm">
-              <Thead bgColor="teal">
+            <Table>
+              <Thead>
                 <Tr>
-                  <Th color="white">Name</Th>
-                  <Th color="white">Type</Th>
-                  <Th color="white">Brand</Th>
-                  <Th color="white">Model</Th>
-                  <Th color="white">Distance</Th>
-                  <Th color="white">Added</Th>
-                  <Th color="white">Notes</Th>
-                  <Th color="white">Action</Th>
-                  <Th></Th>
+                  {columns.map((column, key) => {
+                    return <Th key={key}>{column}</Th>;
+                  })}
                 </Tr>
               </Thead>
               <Tbody>
                 {item.components &&
                   item.components.map((el, key) => {
                     return (
-                      <Tr>
+                      <Tr key={key}>
                         <Td>{el.name}</Td>
                         <Td>{el.type}</Td>
                         <Td>{el.brand}</Td>

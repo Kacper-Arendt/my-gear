@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 export const BikesComponent = () => {
   return (
     <Wrapper>
-      <Heading as="h3">My Bikes</Heading>
+      <Heading as="h3">Bikes</Heading>
       <AddBike />
       <Bikes />
     </Wrapper>
