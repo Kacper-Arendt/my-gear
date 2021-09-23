@@ -22,6 +22,7 @@ import {
   getUserDocument,
 } from "./components/firebase/Firebase";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Spinner } from "./components/UI/Spinner";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -91,7 +92,7 @@ function App() {
       <ChakraProvider>
         <Router>
           {app.status === AppStatus.Loading ? (
-            <h2>Loading...</h2>
+            <Spinner />
           ) : (
             <Switch>
               <AuthRoute

@@ -49,11 +49,15 @@ export const AddComponent = (props: { bike: IBike }) => {
   };
 
   const saveData = () => {
-    setComponents((components) => [
-      ...components,
-      component,
-      ...props.bike.components,
-    ]);
+    if (props.bike.components) {
+      setComponents((components) => [
+        ...components,
+        component,
+        ...props.bike.components,
+      ]);
+    } else {
+      setComponents((components) => [...components, component]);
+    }
     setConfirm(true);
   };
 
