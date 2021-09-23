@@ -8,6 +8,7 @@ import {
   UserLogin,
   PrivateRoute,
   BikeItem,
+  Spinner,
 } from "./components/Components";
 import {
   useAppDispatch,
@@ -22,7 +23,6 @@ import {
   getUserDocument,
 } from "./components/firebase/Firebase";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Spinner } from "./components/UI/Spinner";
 
 const GlobalStyles = createGlobalStyle`
   *,

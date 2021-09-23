@@ -1,7 +1,8 @@
-import { Heading } from "@chakra-ui/react";
+import { Button, Heading } from "@chakra-ui/react";
 import React from "react";
 import styled from "styled-components";
 import { BikesComponent } from "./Components";
+import { firebaseSignOut } from "./firebase/Auth";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,6 +32,7 @@ export const MainPage = () => {
         <Heading as="h1">My Gear</Heading>
         <BikesComponent />
       </GearList>
+      <Button onClick={firebaseSignOut}>Logout</Button>
     </Wrapper>
   );
 };
