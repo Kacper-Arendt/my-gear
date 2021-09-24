@@ -64,6 +64,10 @@ const StyledTable = styled(Table)`
     background-color: aquamarine;
   }
 
+  tr {
+    margin: 1rem;
+  }
+
   td {
     margin: 0.5rem 0;
   }

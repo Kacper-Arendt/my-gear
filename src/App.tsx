@@ -8,6 +8,7 @@ import {
   UserLogin,
   PrivateRoute,
   BikeItem,
+  Spinner,
 } from "./components/Components";
 import {
   useAppDispatch,
@@ -91,7 +92,7 @@ function App() {
       <ChakraProvider>
         <Router>
           {app.status === AppStatus.Loading ? (
-            <h2>Loading...</h2>
+            <Spinner />
           ) : (
             <Switch>
               <AuthRoute

@@ -1,20 +1,22 @@
-import React, { useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { generateGearDocument } from "../../firebase/Firestore";
-import { INewBike } from "../../../models/Gears";
+import React, {useState} from "react";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {generateGearDocument} from "../../firebase/Firestore";
+import {INewBike} from "../../../models/Gears";
 import styled from "styled-components";
 import {
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
   FormControl,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Textarea,
 } from "@chakra-ui/react";
+import {changeStatus} from "../../../redux/slice/AppSlice";
+import {AppStatus} from "../../../models/Enums";
 
 const StyledButton = styled(Button)`
   height: 2rem;
@@ -28,6 +30,7 @@ const StyledTa = styled(Textarea)`
 `;
 
 export const AddBike = () => {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state);
   const [open, setOpen] = useState(false);
   const [bike, setBike] = useState<INewBike>({
@@ -45,7 +48,9 @@ export const AddBike = () => {
   };
 
   const createItemHandler = async () => {
+    dispatch(changeStatus(AppStatus.Loading))
     await generateGearDocument(bike);
+    dispatch(changeStatus(AppStatus.Idle))
     setOpen(false);
   };
   const handleChange = (e: React.ChangeEvent<any>): void => {

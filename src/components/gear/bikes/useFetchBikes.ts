@@ -4,7 +4,7 @@ import { AppStatus, FirebasePath } from "../../../models/Enums";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IBike } from "../../../models/Gears";
 import { changeStatus } from "../../../redux/slice/AppSlice";
-import { addBikes } from "../../../redux/slice/BikeSlice";
+import {loadBikes} from "../../../redux/slice/BikeSlice";
 
 export const useFetchBikes = () => {
   const dispatch = useAppDispatch();
@@ -40,10 +40,11 @@ export const useFetchBikes = () => {
 
   useEffect(() => {
     getBikesHandler();
-  }, []);
+  }, [dispatch]);
+
 
   useEffect(() => {
-    dispatch(addBikes(bikes));
+    dispatch(loadBikes(bikes));
   }, [bikes]);
 
   return bikes;

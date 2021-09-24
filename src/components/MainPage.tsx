@@ -1,7 +1,10 @@
-import { Heading } from "@chakra-ui/react";
+import {Button, Heading} from "@chakra-ui/react";
 import React from "react";
 import styled from "styled-components";
-import { BikesComponent } from "./Components";
+import {BikesComponent} from "./Components";
+import {firebaseSignOut} from "./firebase/Auth";
+import {useAppDispatch} from "../redux/hooks";
+import {logout} from "../redux/slice/UserSlice";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -17,6 +20,7 @@ const GearList = styled.div`
   justify-content: space-between;
   padding: 2rem 1rem;
   font-size: 1.5rem;
+
   h1 {
     font-size: 2rem;
     width: 100%;
@@ -25,12 +29,24 @@ const GearList = styled.div`
 `;
 
 export const MainPage = () => {
-  return (
-    <Wrapper>
-      <GearList>
-        <Heading as="h1">My Gear</Heading>
-        <BikesComponent />
-      </GearList>
-    </Wrapper>
-  );
+    const dispatch = useAppDispatch();
+
+    const signOut = async () => {
+        try {
+            await firebaseSignOut()
+            dispatch(logout())
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    return (
+        <Wrapper>
+            <GearList>
+                <Heading as="h1">My Gear</Heading>
+                <BikesComponent/>
+            </GearList>
+            <Button onClick={signOut}>Logout</Button>
+        </Wrapper>
+    );
 };
