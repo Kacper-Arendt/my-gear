@@ -12,10 +12,9 @@ import {
 } from "@chakra-ui/react";
 import React, {useState} from "react";
 import {updateDocument} from "../../../firebase/Firestore";
-import {AppStatus, FirebasePath, IBike, IComponent} from "../../../../models/Models";
+import {FirebasePath, IBike, IComponent} from "../../../../models/Models";
 import styled from "styled-components";
 import {useAppDispatch} from "../../../../redux/hooks";
-import {changeStatus} from "../../../../redux/slice/AppSlice";
 import {updateComponents} from "../../../../redux/slice/BikeSlice";
 
 const StyledInput = styled(Input)`

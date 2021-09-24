@@ -7,8 +7,11 @@ export const BikeSlice = createSlice({
   name: "bikes",
   initialState,
   reducers: {
-    addBikes(state, action: PayloadAction<Array<IBike>>) {
+    loadBikes(state, action: PayloadAction<Array<IBike>>) {
       return action.payload;
+    },
+    addBike(state, action: PayloadAction<IBike>) {
+      state = [...state, action.payload]
     },
     updateComponents(state, action: PayloadAction<{bikeId: string, components: Array<IComponent>}>) {
       const bike = state.findIndex(bike => bike.bikeId === action.payload.bikeId);
@@ -17,5 +20,5 @@ export const BikeSlice = createSlice({
   },
 });
 
-export const { addBikes, updateComponents } = BikeSlice.actions;
+export const { loadBikes, addBike, updateComponents } = BikeSlice.actions;
 export default BikeSlice.reducer;
