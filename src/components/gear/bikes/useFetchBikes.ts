@@ -40,7 +40,8 @@ export const useFetchBikes = () => {
 
   useEffect(() => {
     getBikesHandler();
-  }, []);
+  }, [dispatch]);
+
 
   useEffect(() => {
     dispatch(addBikes(bikes));

@@ -10,10 +10,13 @@ import {
   ModalOverlay,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { updateDocument } from "../../../firebase/Firestore";
-import { FirebasePath, IBike, IComponent } from "../../../../models/Models";
+import React, {useState} from "react";
+import {updateDocument} from "../../../firebase/Firestore";
+import {AppStatus, FirebasePath, IBike, IComponent} from "../../../../models/Models";
 import styled from "styled-components";
+import {useAppDispatch} from "../../../../redux/hooks";
+import {changeStatus} from "../../../../redux/slice/AppSlice";
+import {updateComponents} from "../../../../redux/slice/BikeSlice";
 
 const StyledInput = styled(Input)`
   margin: 0.5rem;
@@ -36,6 +39,7 @@ export const AddComponent = (props: { bike: IBike }) => {
   const [isConfirm, setConfirm] = useState(false);
   const [component, setComponent] = useState<IComponent>(initValue);
   const [components, setComponents] = useState<Array<IComponent>>([]);
+  const dispatch = useAppDispatch();
 
   const toggleOpenPopup = () => {
     setOpen(!open);
@@ -65,6 +69,7 @@ export const AddComponent = (props: { bike: IBike }) => {
     await updateDocument(FirebasePath.Bikes, props.bike.bikeId, {
       components: components,
     });
+    dispatch(updateComponents({bikeId: props.bike.bikeId, components: components}));
     setComponent((component) => initValue);
     setOpen(false);
     setConfirm(false);
