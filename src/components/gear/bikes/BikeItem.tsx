@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import React, { useEffect, useState } from "react";
 import { IBike } from "../../../models/Gears";
 import { AddComponent } from "./component/AddComponent";
@@ -10,7 +10,8 @@ import { Button, Heading } from "@chakra-ui/react";
 import { Line } from "../../UI/Line";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { device } from "../../../models/Models";
+import {AppStatus, device} from "../../../models/Models";
+import {changeStatus} from "../../../redux/slice/AppSlice";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -83,6 +84,7 @@ const StyledTable = styled(Table)`
 `;
 
 export const BikeItem = () => {
+  const dispatch = useAppDispatch();
   const { bike } = useAppSelector((state) => state);
   const { id }: { id: string } = useParams();
   const [item, setItem] = useState<IBike>();
@@ -102,9 +104,11 @@ export const BikeItem = () => {
     setItem(bike.find((el) => el.bikeId === id));
   }, [bike]);
 
-  const deleteComponent = (name: string) => {
+  const deleteComponent = async (name: string) => {
     if (item && name) {
-      deleteBikeComponent(item, name);
+      dispatch(changeStatus(AppStatus.Loading));
+      await deleteBikeComponent(item, name);
+      dispatch(changeStatus(AppStatus.Idle));
     }
   };
 
