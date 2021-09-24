@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Input, Line, LinkEl, Wrapper} from '../UI/UIComponents';
+import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from '../UI/UIComponents';
 import styled from "styled-components";
 import {useAppDispatch, login} from "../../redux/ReduxComponents";
 import {firebaseSignInWithEmailAndPassword} from "../firebase/Auth";
@@ -20,6 +20,7 @@ export const UserLogin = () => {
     const dispatch = useAppDispatch();
     const [formData, setFormData] = useState({email: '', password: ''});
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({
@@ -31,6 +32,7 @@ export const UserLogin = () => {
     const signInWithEmailAndPasswordHandler = async (e: React.SyntheticEvent): Promise<void> => {
         e.preventDefault();
         try {
+            setLoading(true);
             const userLogin = await firebaseSignInWithEmailAndPassword(formData.email, formData.password);
             if (userLogin.user) {
                 const response = await getUserDocument(userLogin.user.uid);
@@ -44,7 +46,8 @@ export const UserLogin = () => {
         setFormData({
             email: '',
             password: ''
-        })
+        });
+        setLoading(false);
     };
 
     return (
@@ -68,6 +71,7 @@ export const UserLogin = () => {
                 />
                 <Button>Login</Button>
                 {message && message}
+                {loading && <SpinnerCube />}
                 <p>Create an Account?</p>
                 <LinkEl to='/register' value='Click'/>
                 <LinkEl to='/reset' value='Forgot Your Password?'/>
