@@ -1,11 +1,12 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
-import { useAppSelector } from "../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import { AppStatus, FirebasePath } from "../../../models/Models";
 import { docDelete } from "../../firebase/Firestore";
 import { useHistory } from "react-router-dom";
 import { useFetchBikes } from "./useFetchBikes";
+import {changeStatus} from "../../../redux/slice/AppSlice";
 
 const GearItem = styled.div`
   width: 100%;
@@ -26,13 +27,16 @@ export const Bikes = () => {
   const { app } = useAppSelector((state) => state);
   const history = useHistory();
   const bikes = useFetchBikes();
+  const dispatch = useAppDispatch();
 
   const redirectToBike = (id: string) => {
     history.push(id);
   };
 
   const deleteBike = async (id: string) => {
+    dispatch(changeStatus(AppStatus.Loading));
     await docDelete(FirebasePath.Bikes, id);
+    dispatch(changeStatus(AppStatus.Idle));
   };
 
   return (
