@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from '../UI/UIComponents';
 import styled from "styled-components";
-import {useAppDispatch, login} from "../../redux/ReduxComponents";
+import {useAppDispatch, login, useAppSelector} from "../../redux/ReduxComponents";
 import {firebaseSignInWithEmailAndPassword} from "../firebase/Auth";
 import {getUserDocument} from "../firebase/Firestore";
+import {useHistory} from "react-router-dom";
 
 const Form = styled.form`
   width: 25rem;
@@ -21,6 +22,8 @@ export const UserLogin = () => {
     const [formData, setFormData] = useState({email: '', password: ''});
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
+    const history = useHistory();
+    const {user} = useAppSelector((state) => state);
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({
@@ -33,22 +36,27 @@ export const UserLogin = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const userLogin = await firebaseSignInWithEmailAndPassword(formData.email, formData.password);
-            if (userLogin.user) {
-                const response = await getUserDocument(userLogin.user.uid);
+            const request = await firebaseSignInWithEmailAndPassword(formData.email, formData.password);
+            if (request.user) {
+                setFormData({email: '', password: ''});
+                const response = await getUserDocument(request.user.uid);
                 if (response) {
                     dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
+                    setLoading(false);
+                    history.push('/');
                 }
             }
         } catch (error) {
             setMessage('Something went wrong');
+            setLoading(false);
         }
-        setFormData({
-            email: '',
-            password: ''
-        });
-        setLoading(false);
     };
+
+    useEffect(() => {
+        if (user.isAuth === true) {
+            history.push('/')
+        }
+    }, []);
 
     return (
         <Wrapper>
@@ -71,7 +79,7 @@ export const UserLogin = () => {
                 />
                 <Button>Login</Button>
                 {message && message}
-                {loading && <SpinnerCube />}
+                {loading && <SpinnerCube/>}
                 <p>Create an Account?</p>
                 <LinkEl to='/register' value='Click'/>
                 <LinkEl to='/reset' value='Forgot Your Password?'/>
