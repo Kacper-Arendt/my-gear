@@ -41,9 +41,8 @@ export const UserLogin = () => {
                 setFormData({email: '', password: ''});
                 const response = await getUserDocument(request.user.uid);
                 if (response) {
-                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}))
                     setLoading(false);
-                    history.push('/');
+                    dispatch(login({id: response.id, email: response.email, name: response.name, isAuth: true}));
                 }
             }
         } catch (error) {
@@ -54,9 +53,9 @@ export const UserLogin = () => {
 
     useEffect(() => {
         if (user.isAuth === true) {
-            history.push('/')
+            history.push('/');
         }
-    }, []);
+    }, [user, history]);
 
     return (
         <Wrapper>

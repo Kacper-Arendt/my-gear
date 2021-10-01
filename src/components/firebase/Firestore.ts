@@ -32,10 +32,7 @@ export const getUserDocument = async (id: string) => {
   }
 };
 
-export const generateUserDocument = async (
-  id: string,
-  user: IUser
-): Promise<any> => {
+export const generateUserDocument = async (id: string,user: IUser): Promise<any> => {
   const { name, email } = user;
   const docRef = doc(firestore, FirebasePath.Users, id);
   const snapshot = await getDoc(docRef);

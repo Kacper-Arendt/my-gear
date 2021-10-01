@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
-import {AuthRoute, BikeItem, MainPage, PrivateRoute, Register, Spinner, UserLogin,} from "./components/Components";
+import {BikeItem, MainPage, PrivateRoute, Register, Spinner, UserLogin,} from "./components/Components";
 import {changeStatus, login, useAppDispatch, useAppSelector,} from "./redux/ReduxComponents";
 import {AppStatus, device} from "./models/Models";
 import {User} from "firebase/auth";
@@ -49,28 +49,24 @@ function App() {
     const dispatch = useAppDispatch();
     const {app, user} = useAppSelector((state) => state);
 
-    const checkIfAuth = async () => {
-            firebaseOnUserChange(async (user: User | null) => {
-                if (user) {
-                    const request = await getUserDocument(user.uid);
-                    if (request) {
-                        dispatch(
-                            login({
-                                id: request.id,
-                                email: request.email,
-                                name: request.name,
-                                isAuth: true,
-                            })
-                        );
-                    }
-                } else {
-                    console.log('User not found');
-                }
-            })
-    }
-
     useEffect(() => {
-        checkIfAuth()
+        firebaseOnUserChange(async (user: User | null) => {
+            if (user) {
+                const request = await getUserDocument(user.uid);
+                if (request) {
+                    dispatch(
+                        login({
+                            id: request.id,
+                            email: request.email,
+                            name: request.name,
+                            isAuth: true,
+                        })
+                    );
+                }
+            } else {
+                console.log('User not found');
+            }
+        })
         dispatch(changeStatus(AppStatus.Idle));
     }, [dispatch]);
 
@@ -83,19 +79,8 @@ function App() {
                         <Spinner/>
                     ) : (
                         <Switch>
-                            <Route component={UserLogin} path='/login' exact/>
-                            <Route component={Register} path='/register' />
-                            {/*<AuthRoute*/}
-                            {/*    component={UserLogin}*/}
-                            {/*    isSignedIn={!!user.isAuth}*/}
-                            {/*    path="/login"*/}
-                            {/*/>*/}
-                            {/*<AuthRoute*/}
-                            {/*    component={Register}*/}
-                            {/*    isSignedIn={!!user.isAuth}*/}
-                            {/*    path="/register"*/}
-                            {/*    exact*/}
-                            {/*/>*/}
+                            <Route component={UserLogin} path='/login'/>
+                            <Route component={Register} path='/register'/>
                             <PrivateRoute
                                 isSignedIn={!!user.isAuth}
                                 component={MainPage}

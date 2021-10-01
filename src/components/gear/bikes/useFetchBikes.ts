@@ -11,41 +11,39 @@ export const useFetchBikes = () => {
   const { user } = useAppSelector((state) => state);
   const [bikes, setBikes] = useState<Array<IBike>>([]);
 
-  const getBikesHandler = async () => {
-    const request = await getDocument(FirebasePath.Bikes, user.id);
-    if (request) {
-      request.forEach((doc) => {
-        const { userId, name, km, components, model, weight, brand, notes } =
-          doc.data();
-        if (!bikes.some((bike) => bike.bikeId === doc.id)) {
-          setBikes((bikes) => [
-            ...bikes,
-            {
-              km: km,
-              name: name,
-              userId: userId,
-              bikeId: doc.id,
-              model: model,
-              weight: weight,
-              brand: brand,
-              notes: notes,
-              components: components,
-            },
-          ]);
-        }
-      });
-    }
-    dispatch(changeStatus(AppStatus.Idle));
-  };
-
   useEffect(() => {
+    const getBikesHandler = async () => {
+      const request = await getDocument(FirebasePath.Bikes, user.id);
+      if (request) {
+        request.forEach((doc) => {
+          const { userId, name, km, components, model, weight, brand, notes } =
+              doc.data();
+          if (!bikes.some((bike) => bike.bikeId === doc.id)) {
+            setBikes((bikes) => [
+              ...bikes,
+              {
+                km: km,
+                name: name,
+                userId: userId,
+                bikeId: doc.id,
+                model: model,
+                weight: weight,
+                brand: brand,
+                notes: notes,
+                components: components,
+              },
+            ]);
+          }
+        });
+      }
+      dispatch(changeStatus(AppStatus.Idle));
+    };
     getBikesHandler();
   }, [dispatch]);
 
-
   useEffect(() => {
     dispatch(loadBikes(bikes));
-  }, [bikes]);
+  }, [bikes, dispatch]);
 
   return bikes;
 };

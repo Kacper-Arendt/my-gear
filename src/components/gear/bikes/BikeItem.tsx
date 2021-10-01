@@ -102,7 +102,7 @@ export const BikeItem = () => {
 
   useEffect(() => {
     setItem(bike.find((el) => el.bikeId === id));
-  }, [bike]);
+  }, [bike, id]);
 
   const deleteComponent = async (name: string) => {
     if (item && name) {

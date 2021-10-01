@@ -4,7 +4,7 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     onAuthStateChanged,
-    User
+    User,
 } from 'firebase/auth';
 
 export function firebaseSignOut(): Promise<void> {
