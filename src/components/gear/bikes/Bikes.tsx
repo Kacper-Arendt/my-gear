@@ -45,9 +45,9 @@ export const Bikes = () => {
         <p>Loading...</p>
       ) : (
         <>
-          {bikes.map((el, key) => {
+          {bikes.map((el) => {
             return (
-              <GearItem key={key}>
+              <GearItem key={el.bikeId}>
                 <p>{el.name}</p>
                 <p>{el.km}km</p>
                 <Button

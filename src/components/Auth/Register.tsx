@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from "../UI/UIComponents";
 import styled from "styled-components";
 import {INewUser} from "../../models/User";
 import {generateUserDocument} from "../firebase/Firestore";
-import {firebaseCreateUserWithEmailAndPassword} from "../firebase/Auth";
-import {useAppDispatch} from "../../redux/hooks";
-import {login} from "../../redux/slice/UserSlice";
+import {firebaseCreateUserWithEmailAndPassword, firebaseSignOut} from "../firebase/Auth";
+import {useHistory} from "react-router-dom";
+import {useAppSelector} from "../../redux/hooks";
 
 const Form = styled.form`
   width: 25rem;
@@ -19,7 +19,7 @@ const Form = styled.form`
 `;
 
 export const Register = () => {
-    const [user, setUser] = useState<INewUser>({
+    const [newUser, setNewUser] = useState<INewUser>({
         id: "",
         email: "",
         password: "",
@@ -28,11 +28,12 @@ export const Register = () => {
     });
     const [message, setMessage] = useState<string>("");
     const [loading, setLoading] = useState(false);
-    const dispatch = useAppDispatch();
+    const history = useHistory();
+    const {user} = useAppSelector((state) => state);
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setUser({
-            ...user,
+        setNewUser({
+            ...newUser,
             [e.target.name]: e.target.value,
         });
     };
@@ -41,23 +42,17 @@ export const Register = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const createUser = await firebaseCreateUserWithEmailAndPassword(
-                user.email,
-                user.password
-            );
+            const createUser = await firebaseCreateUserWithEmailAndPassword(newUser.email, newUser.password);
             if (createUser.user) {
+                setNewUser({...newUser, id: createUser.user.uid});
+                await generateUserDocument(createUser.user.uid, newUser);
+                await firebaseSignOut();
                 setMessage("User Created");
-                setUser({
-                    ...user,
-                    id: createUser.user.uid,
-                });
-                await generateUserDocument(createUser.user.uid, user);
-                dispatch(login({id: createUser.user.uid, email: user.email, name: user.name, isAuth: true}));
             }
         } catch (error) {
-            setMessage("Email already in use ");
+            setMessage("Something went wrong");
         }
-        setUser({
+        setNewUser({
             id: "",
             email: "",
             password: "",
@@ -66,6 +61,12 @@ export const Register = () => {
         });
         setLoading(false);
     };
+
+    useEffect(() => {
+        if (user.isAuth === true) {
+            history.push('/')
+        }
+    }, [user, history]);
 
     return (
         <Wrapper>
@@ -76,33 +77,33 @@ export const Register = () => {
                     type="text"
                     name="name"
                     placeholder="Name"
-                    value={user.name}
+                    value={newUser.name}
                     onChange={updateField}
                 />
                 <Input
                     type="email"
                     name="email"
                     placeholder="Email"
-                    value={user.email}
+                    value={newUser.email}
                     onChange={updateField}
                 />
                 <Input
                     type="password"
                     name="password"
                     placeholder="Password"
-                    value={user.password}
+                    value={newUser.password}
                     onChange={updateField}
                 />
                 <Input
                     type="password"
                     name="confirmPassword"
                     placeholder="Repeat Your Password"
-                    value={user.confirmPassword}
+                    value={newUser.confirmPassword}
                     onChange={updateField}
                 />
                 <Button type="submit">Submit</Button>
                 <p>{message && message}</p>
-                {loading && <SpinnerCube />}
+                {loading && <SpinnerCube/>}
                 <p>Already have an account?</p>
                 <LinkEl to="/login" value="Click"/>
             </Form>
