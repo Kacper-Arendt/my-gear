@@ -160,7 +160,7 @@ export const BikeItem = () => {
                 {item.components &&
                   item.components.map((el, key) => {
                     return (
-                      <Tr key={key}>
+                      <Tr key={key + el.name}>
                         <Td>{el.name}</Td>
                         <Td>{el.type}</Td>
                         <Td>{el.brand}</Td>
