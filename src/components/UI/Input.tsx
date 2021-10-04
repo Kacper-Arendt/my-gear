@@ -7,6 +7,8 @@ interface InputProps {
     name: string,
     value?: string,
     placeholder: string,
+    required?: boolean,
+    register?: any
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
@@ -14,7 +16,7 @@ const StyledInput = styled.input`
   width: 100%;
   max-width: 30rem;
   padding: 1rem 0.5rem ;
-  margin: .5rem 0;
+  margin: 1rem 0;
   border: .15rem solid black;
   font-size: inherit;
   font-weight: 700;
@@ -46,6 +48,7 @@ export const Input = (props: InputProps) => {
             value={props.value}
             onBlur={props.onChange}
             placeholder={props.placeholder}
+            {...props.register}
             onChange={props.onChange}
         />
     )
