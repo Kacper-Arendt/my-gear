@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from "../UI/UIComponents";
+import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper, RegisterSchema} from "../Components";
 import styled from "styled-components";
-import {INewUser} from "../../models/User";
+import {INewUser, IRegisterForm} from "../../models/Models";
 import {generateUserDocument} from "../firebase/Firestore";
 import {firebaseCreateUserWithEmailAndPassword, firebaseSignOut} from "../firebase/Auth";
 import {useHistory} from "react-router-dom";
@@ -21,30 +21,6 @@ const Form = styled.form`
   }
 `;
 
-const schema = yup.object().shape({
-    name: yup.string()
-        .min(4, 'Name should be at least 4 characters')
-        .max(15, '15 characters max')
-        .required('Name is required'),
-    email: yup.string()
-        .email()
-        .required('Email is required'),
-    password: yup.string()
-        .min(6, 'Password must be at least 6 characters')
-        .max(32)
-        .required('Password is Required'),
-    confirmPassword: yup.string()
-        .oneOf([yup.ref('password'), null], 'The password and confirmation password do not match.'),
-});
-
-interface IUseForm {
-    name: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
-}
-
-
 export const Register = () => {
     const [newUser, setNewUser] = useState<INewUser>({
         id: "",
@@ -57,8 +33,8 @@ export const Register = () => {
     const [loading, setLoading] = useState(false);
     const history = useHistory();
     const {user} = useAppSelector((state) => state);
-    const {register, handleSubmit, formState: {errors}} = useForm<IUseForm>({
-        resolver: yupResolver<yup.AnyObjectSchema>(schema)
+    const {register, handleSubmit, formState: {errors}} = useForm<IRegisterForm>({
+        resolver: yupResolver<yup.AnyObjectSchema>(RegisterSchema)
     });
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {

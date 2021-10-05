@@ -7,3 +7,4 @@ export * from "./gear/bikes/AddBike";
 export * from "./gear/bikes/Bikes";
 export * from "./gear/bikes/BikesComponent";
 export * from "./UI/UIComponents";
+export * from "./validation/Schema";

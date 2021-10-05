@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from '../UI/UIComponents';
+import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper, LoginSchema} from '../Components';
 import styled from "styled-components";
 import {useAppDispatch, login, useAppSelector} from "../../redux/ReduxComponents";
 import {firebaseSignInWithEmailAndPassword} from "../firebase/Auth";
@@ -8,6 +8,7 @@ import {useHistory} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {ILoginForm} from "../../models/Validation";
 
 const Form = styled.form`
   width: 25rem;
@@ -20,16 +21,6 @@ const Form = styled.form`
   }
 `
 
-const schema = yup.object().shape({
-    email: yup.string().email().required('Email is Required'),
-    password: yup.string().min(6, 'Password must be at least 6 characters').max(32).required('Password is Required'),
-});
-
-interface IUseForm {
-    email: string,
-    password: string,
-}
-
 export const UserLogin = () => {
     const dispatch = useAppDispatch();
     const {user} = useAppSelector((state) => state);
@@ -37,8 +28,8 @@ export const UserLogin = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const history = useHistory();
-    const {register, handleSubmit, formState: {errors}} = useForm<IUseForm>({
-        resolver: yupResolver<yup.AnyObjectSchema>(schema)
+    const {register, handleSubmit, formState: {errors}} = useForm<ILoginForm>({
+        resolver: yupResolver<yup.AnyObjectSchema>(LoginSchema)
     });
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {

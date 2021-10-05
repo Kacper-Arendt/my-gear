@@ -4,7 +4,7 @@ export interface INewBike {
   km: number;
   brand: string;
   model: string;
-  notes: string;
+  notes?: string;
   weight: number;
 }
 
