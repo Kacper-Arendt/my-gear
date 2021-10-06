@@ -19,13 +19,17 @@ import {AppStatus, IBikeForm, INewBike} from "../../../models/Models";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {AddBikeSchema} from "../../validation/Schema";
+import {BikeSchema} from "../../validation/Schema";
 
 const StyledFormControl = styled(FormControl)`
 p{
   text-align: center;
+  
+  ::first-letter{
+    text-transform: capitalize;
+  }
 }
-`
+`;
 
 const StyledButton = styled(Button)`
   height: 2rem;
@@ -52,7 +56,7 @@ export const AddBike = () => {
         notes: "",
     });
     const {register, handleSubmit, formState: {errors}} = useForm<IBikeForm>({
-        resolver: yupResolver<yup.AnyObjectSchema>(AddBikeSchema)
+        resolver: yupResolver<yup.AnyObjectSchema>(BikeSchema)
     });
 
     const toggleOpenPopup = () => {
@@ -85,48 +89,43 @@ export const AddBike = () => {
                     <ModalBody pb={6}>
                         <StyledFormControl mt={4}>
                             <StyledInput
-                                name="name"
                                 type="text"
-                                onChange={handleChange}
                                 placeholder="Bike Name"
-                                register={{...register('name')}}
+                                {...register('name')}
                                 required
+                                onChange={handleChange}
                             />
                             <p>{errors.name?.message}</p>
                             <StyledInput
-                                name="brand"
                                 type="text"
-                                onChange={handleChange}
                                 placeholder="Brand"
-                                register={{...register('brand')}}
+                                {...register('brand')}
                                 required
+                                onChange={handleChange}
                             />
                             <p>{errors.brand?.message}</p>
                             <StyledInput
-                                name="model"
                                 type="text"
-                                onChange={handleChange}
                                 placeholder="Model"
-                                register={{...register('model')}}
+                                {...register('model')}
                                 required
+                                onChange={handleChange}
                             />
                             <p>{errors.model?.message}</p>
                             <StyledInput
-                                name="weight"
                                 type="number"
-                                onChange={handleChange}
                                 placeholder="Weight"
-                                register={{...register('weight')}}
+                                {...register('weight')}
                                 required
+                                onChange={handleChange}
                             />
                             <p>{errors.weight?.message}</p>
                             <StyledInput
-                                name="km"
                                 type="number"
-                                onChange={handleChange}
                                 placeholder="Kilometers traveled"
-                                register={{...register('km')}}
+                                {...register('km')}
                                 required
+                                onChange={handleChange}
                             />
                             <p>{errors.km?.message}</p>
                             <StyledTa

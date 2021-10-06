@@ -14,3 +14,12 @@ export interface IBikeForm {
     model: string;
     weight: number;
 }
+
+export interface IComponentForm {
+    name: string;
+    type: string;
+    brand: string;
+    model: string;
+    added: string;
+    distance: number;
+}

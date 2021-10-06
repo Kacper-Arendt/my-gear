@@ -26,20 +26,45 @@ export const RegisterSchema = yup.object().shape({
         .oneOf([yup.ref('password'), null], 'The password and confirmation password do not match.'),
 });
 
-export const AddBikeSchema = yup.object().shape({
+export const BikeSchema = yup.object().shape({
     name: yup.string()
-        .min(3, 'Name should be at least 3 characters')
-        .max(15, '15 characters max')
-        .required(''),
+        .min(3)
+        .max(15)
+        .required(),
     brand: yup.string()
-        .min(3, 'Brand should be at least 3 characters')
-        .max(15, '15 characters max')
+        .min(3)
+        .max(15)
         .required(),
     model: yup.string()
-        .max(6, '6 characters max')
+        .max(6)
         .required(),
     weight: yup.number()
+        .typeError('Weight is required')
         .required(),
     km: yup.number()
+        .typeError('Kilometers Traveled is required')
+        .required(),
+});
+
+export const ComponentSchema = yup.object().shape({
+    name: yup.string()
+        .min(3)
+        .max(15)
+        .required(),
+    type: yup.string()
+        .min(3)
+        .max(15)
+        .required(),
+    brand: yup.string()
+        .min(3)
+        .max(12)
+        .required(),
+    model: yup.string()
+        .required(),
+    distance: yup.number()
+        .typeError('Distance is required')
+        .required(),
+    added: yup.date()
+        .typeError('Date is required')
         .required(),
 });
