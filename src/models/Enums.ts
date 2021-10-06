@@ -1,4 +1,4 @@
-export enum AppStatus {
+export enum IAppStatus {
   Idle = "IDLE",
   Loading = "LOADING",
 }

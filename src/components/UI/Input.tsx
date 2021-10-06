@@ -3,8 +3,6 @@ import styled from "styled-components";
 
 interface InputProps {
     type: string,
-    id?: string,
-    name: string,
     value?: string,
     placeholder: string,
     required?: boolean,
@@ -37,19 +35,17 @@ const StyledInput = styled.input`
     transform: scale(1.05);
     border: .2rem solid orange;
   }
-`
+`;
 
 export const Input = (props: InputProps) => {
     return (
         <StyledInput
             type={props.type}
-            id={props.id}
-            name={props.name}
             value={props.value}
             onBlur={props.onChange}
             placeholder={props.placeholder}
             {...props.register}
             onChange={props.onChange}
         />
-    )
+    );
 }

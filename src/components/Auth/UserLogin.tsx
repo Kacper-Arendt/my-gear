@@ -29,6 +29,7 @@ export const UserLogin = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const history = useHistory();
     const {register, handleSubmit, formState: {errors}} = useForm<ILoginForm>({
+        mode: 'onBlur',
         resolver: yupResolver<yup.AnyObjectSchema>(LoginSchema)
     });
 
@@ -71,7 +72,6 @@ export const UserLogin = () => {
                 <Input
                     register={{...register('email')}}
                     type='email'
-                    name='email'
                     placeholder='Email'
                     value={formData.email}
                     onChange={updateField}
@@ -81,7 +81,6 @@ export const UserLogin = () => {
                 <Input
                     register={{...register('password')}}
                     type='password'
-                    name='password'
                     placeholder='Password'
                     value={formData.password}
                     onChange={updateField}

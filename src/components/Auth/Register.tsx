@@ -34,6 +34,7 @@ export const Register = () => {
     const history = useHistory();
     const {user} = useAppSelector((state) => state);
     const {register, handleSubmit, formState: {errors}} = useForm<IRegisterForm>({
+        mode: 'onBlur',
         resolver: yupResolver<yup.AnyObjectSchema>(RegisterSchema)
     });
 
@@ -80,7 +81,6 @@ export const Register = () => {
             <Form onSubmit={handleSubmit(createUserWithEmailAndPasswordHandler)}>
                 <Input
                     type="text"
-                    name="name"
                     placeholder="Name"
                     value={newUser.name}
                     onChange={updateField}
@@ -90,7 +90,6 @@ export const Register = () => {
                 <p>{errors.name?.message}</p>
                 <Input
                     type="email"
-                    name="email"
                     placeholder="Email"
                     value={newUser.email}
                     onChange={updateField}
@@ -100,7 +99,6 @@ export const Register = () => {
                 <p>{errors.email?.message}</p>
                 <Input
                     type="password"
-                    name="password"
                     placeholder="Password"
                     value={newUser.password}
                     onChange={updateField}
@@ -110,7 +108,6 @@ export const Register = () => {
                 <p>{errors.password?.message}</p>
                 <Input
                     type="password"
-                    name="confirmPassword"
                     placeholder="Confirm Password"
                     value={newUser.confirmPassword}
                     onChange={updateField}

@@ -1,14 +1,14 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {IApp, AppStatus} from "../../models/Models";
+import {IApp, IAppStatus} from "../../models/Models";
 
-const initialState = {status: AppStatus.Loading, message: ''} as IApp;
+const initialState = {status: IAppStatus.Loading, message: ''} as IApp;
 
 export const appSlice = createSlice({
     name: 'app,',
     initialState,
     reducers: {
-        changeStatus(state, action: PayloadAction<AppStatus>) {
+        changeStatus(state, action: PayloadAction<IAppStatus>) {
             state.status = action.payload;
         },
         setMessage(state, action: PayloadAction<string>) {

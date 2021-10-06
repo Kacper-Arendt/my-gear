@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import { AppStatus, FirebasePath } from "../../../models/Models";
+import { IAppStatus, FirebasePath } from "../../../models/Models";
 import { docDelete } from "../../firebase/Firestore";
 import { useHistory } from "react-router-dom";
 import { useFetchBikes } from "./useFetchBikes";
@@ -29,19 +29,19 @@ export const Bikes = () => {
   const bikes = useFetchBikes();
   const dispatch = useAppDispatch();
 
-  const redirectToBike = (id: string) => {
+  const redirectToBike = (id: string): void => {
     history.push(id);
   };
 
   const deleteBike = async (id: string) => {
-    dispatch(changeStatus(AppStatus.Loading));
+    dispatch(changeStatus(IAppStatus.Loading));
     await docDelete(FirebasePath.Bikes, id);
-    dispatch(changeStatus(AppStatus.Idle));
+    dispatch(changeStatus(IAppStatus.Idle));
   };
 
   return (
     <>
-      {app.status === AppStatus.Loading ? (
+      {app.status === IAppStatus.Loading ? (
         <p>Loading...</p>
       ) : (
         <>

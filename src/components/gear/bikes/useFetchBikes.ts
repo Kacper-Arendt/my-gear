@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDocument } from "../../firebase/Firestore";
-import { AppStatus, FirebasePath } from "../../../models/Enums";
+import { IAppStatus, FirebasePath } from "../../../models/Enums";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IBike } from "../../../models/Gears";
 import { changeStatus } from "../../../redux/slice/AppSlice";
@@ -36,7 +36,7 @@ export const useFetchBikes = () => {
           }
         });
       }
-      dispatch(changeStatus(AppStatus.Idle));
+      dispatch(changeStatus(IAppStatus.Idle));
     };
     getBikesHandler();
   }, [dispatch]);

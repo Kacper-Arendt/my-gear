@@ -1,6 +1,4 @@
-import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {generateGearDocument} from "../../firebase/Firestore";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {
     Button,
@@ -14,21 +12,24 @@ import {
     ModalOverlay,
     Textarea,
 } from "@chakra-ui/react";
-import {changeStatus} from "../../../redux/slice/AppSlice";
-import {AppStatus, IBikeForm, INewBike} from "../../../models/Models";
 import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {yupResolver} from "@hookform/resolvers/yup";
+
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {generateGearDocument} from "../../firebase/Firestore";
+import {changeStatus} from "../../../redux/slice/AppSlice";
+import {IAppStatus, IBikeForm, INewBike} from "../../../models/Models";
 import {BikeSchema} from "../../validation/Schema";
 
 const StyledFormControl = styled(FormControl)`
-p{
-  text-align: center;
-  
-  ::first-letter{
-    text-transform: capitalize;
+  p {
+    text-align: center;
+
+    ::first-letter {
+      text-transform: capitalize;
+    }
   }
-}
 `;
 
 const StyledButton = styled(Button)`
@@ -38,6 +39,7 @@ const StyledButton = styled(Button)`
 const StyledInput = styled(Input)`
   margin: 0.5rem;
 `;
+
 const StyledTa = styled(Textarea)`
   margin: 0.5rem;
 `;
@@ -55,18 +57,26 @@ export const AddBike = () => {
         weight: 0,
         notes: "",
     });
-    const {register, handleSubmit, formState: {errors}} = useForm<IBikeForm>({
+    const {register, handleSubmit, formState: {errors}, clearErrors, reset} = useForm<IBikeForm>({
+        mode: 'onBlur',
         resolver: yupResolver<yup.AnyObjectSchema>(BikeSchema)
     });
 
-    const toggleOpenPopup = () => {
+    useEffect(() => {
+        if (errors) {
+            setInterval((clearErrors), 8000);
+        }
+    }, [errors]);
+
+    const toggleOpenPopup = (): void => {
+        reset()
         setOpen(!open);
     };
 
     const createItemHandler = async () => {
-        dispatch(changeStatus(AppStatus.Loading))
+        dispatch(changeStatus(IAppStatus.Loading))
         await generateGearDocument(bike);
-        dispatch(changeStatus(AppStatus.Idle))
+        dispatch(changeStatus(IAppStatus.Idle))
         setOpen(false);
     };
 

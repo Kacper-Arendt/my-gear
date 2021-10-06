@@ -10,15 +10,15 @@ import {
     ModalOverlay,
     Textarea,
 } from "@chakra-ui/react";
-import React, {useState} from "react";
-import {updateDocument} from "../../../firebase/Firestore";
-import {FirebasePath, IBike, IComponent, IComponentForm} from "../../../../models/Models";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {useAppDispatch} from "../../../../redux/hooks";
-import {updateComponents} from "../../../../redux/slice/BikeSlice";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {updateDocument} from "../../../firebase/Firestore";
+import {FirebasePath, IBike, IComponent, IComponentForm} from "../../../../models/Models";
+import {useAppDispatch} from "../../../../redux/hooks";
+import {updateComponents} from "../../../../redux/slice/BikeSlice";
 import {ComponentSchema} from "../../../validation/Schema";
 
 const StyledFormControl = styled(FormControl)`
@@ -34,6 +34,7 @@ const StyledFormControl = styled(FormControl)`
 const StyledInput = styled(Input)`
   margin: 0.5rem;
 `;
+
 const StyledTa = styled(Textarea)`
   margin: 0.5rem;
 `;
@@ -53,11 +54,19 @@ export const AddComponent = (props: { bike: IBike }) => {
     const [component, setComponent] = useState<IComponent>(initValue);
     const [components, setComponents] = useState<Array<IComponent>>([]);
     const dispatch = useAppDispatch();
-    const {register, handleSubmit, formState: {errors}} = useForm<IComponentForm>({
+    const {register, handleSubmit, formState: {errors}, clearErrors, reset} = useForm<IComponentForm>({
+        mode: 'onBlur',
         resolver: yupResolver<yup.AnyObjectSchema>(ComponentSchema)
     });
 
-    const toggleOpenPopup = () => {
+    useEffect(() => {
+        if (errors) {
+            setInterval((clearErrors), 8000);
+        }
+    }, [errors]);
+
+    const toggleOpenPopup = (): void => {
+        reset();
         setOpen(!open);
     };
 
@@ -68,7 +77,7 @@ export const AddComponent = (props: { bike: IBike }) => {
         });
     };
 
-    const saveData = () => {
+    const saveData = (): void => {
         if (props.bike.components) {
             setComponents((components) => [
                 ...components,
