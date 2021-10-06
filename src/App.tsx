@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
 import {BikeItem, MainPage, PrivateRoute, Register, Spinner, UserLogin,} from "./components/Components";
 import {changeStatus, login, useAppDispatch, useAppSelector,} from "./redux/ReduxComponents";
-import {AppStatus, device} from "./models/Models";
+import {IAppStatus, device} from "./models/Models";
 import {User} from "firebase/auth";
 import {firebaseOnUserChange, getUserDocument,} from "./components/firebase/Firebase";
 import {ChakraProvider} from "@chakra-ui/react";
@@ -67,7 +67,7 @@ function App() {
                 console.log('User not found');
             }
         })
-        dispatch(changeStatus(AppStatus.Idle));
+        dispatch(changeStatus(IAppStatus.Idle));
     }, [dispatch]);
 
     return (
@@ -75,7 +75,7 @@ function App() {
             <GlobalStyles/>
             <ChakraProvider>
                 <Router>
-                    {app.status === AppStatus.Loading ? (
+                    {app.status === IAppStatus.Loading ? (
                         <Spinner/>
                     ) : (
                         <Switch>

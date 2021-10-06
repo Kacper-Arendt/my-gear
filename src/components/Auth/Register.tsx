@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from "../UI/UIComponents";
+import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper, RegisterSchema} from "../Components";
 import styled from "styled-components";
-import {INewUser} from "../../models/User";
+import {INewUser, IRegisterForm} from "../../models/Models";
 import {generateUserDocument} from "../firebase/Firestore";
 import {firebaseCreateUserWithEmailAndPassword, firebaseSignOut} from "../firebase/Auth";
 import {useHistory} from "react-router-dom";
 import {useAppSelector} from "../../redux/hooks";
+import * as yup from "yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 
 const Form = styled.form`
   width: 25rem;
@@ -13,7 +16,7 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
 
-  p {
+  p:last-of-type {
     margin-top: 1.5rem;
   }
 `;
@@ -30,6 +33,10 @@ export const Register = () => {
     const [loading, setLoading] = useState(false);
     const history = useHistory();
     const {user} = useAppSelector((state) => state);
+    const {register, handleSubmit, formState: {errors}} = useForm<IRegisterForm>({
+        mode: 'onBlur',
+        resolver: yupResolver<yup.AnyObjectSchema>(RegisterSchema)
+    });
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setNewUser({
@@ -38,8 +45,7 @@ export const Register = () => {
         });
     };
 
-    const createUserWithEmailAndPasswordHandler = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
+    const createUserWithEmailAndPasswordHandler = async () => {
         try {
             setLoading(true);
             const createUser = await firebaseCreateUserWithEmailAndPassword(newUser.email, newUser.password);
@@ -72,35 +78,43 @@ export const Register = () => {
         <Wrapper>
             <h2>Welcome</h2>
             <Line/>
-            <Form onSubmit={createUserWithEmailAndPasswordHandler}>
+            <Form onSubmit={handleSubmit(createUserWithEmailAndPasswordHandler)}>
                 <Input
                     type="text"
-                    name="name"
                     placeholder="Name"
                     value={newUser.name}
                     onChange={updateField}
+                    register={{...register('name')}}
+                    required
                 />
+                <p>{errors.name?.message}</p>
                 <Input
                     type="email"
-                    name="email"
                     placeholder="Email"
                     value={newUser.email}
                     onChange={updateField}
+                    register={{...register('email')}}
+                    required
                 />
+                <p>{errors.email?.message}</p>
                 <Input
                     type="password"
-                    name="password"
                     placeholder="Password"
                     value={newUser.password}
                     onChange={updateField}
+                    register={{...register('password')}}
+                    required
                 />
+                <p>{errors.password?.message}</p>
                 <Input
                     type="password"
-                    name="confirmPassword"
-                    placeholder="Repeat Your Password"
+                    placeholder="Confirm Password"
                     value={newUser.confirmPassword}
                     onChange={updateField}
+                    register={{...register('confirmPassword')}}
+                    required
                 />
+                <p>{errors.confirmPassword?.message}</p>
                 <Button type="submit">Submit</Button>
                 <p>{message && message}</p>
                 {loading && <SpinnerCube/>}

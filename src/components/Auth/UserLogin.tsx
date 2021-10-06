@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper} from '../UI/UIComponents';
+import {Button, Input, Line, LinkEl, SpinnerCube, Wrapper, LoginSchema} from '../Components';
 import styled from "styled-components";
 import {useAppDispatch, login, useAppSelector} from "../../redux/ReduxComponents";
 import {firebaseSignInWithEmailAndPassword} from "../firebase/Auth";
 import {getUserDocument} from "../firebase/Firestore";
 import {useHistory} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import * as yup from "yup";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {ILoginForm} from "../../models/Validation";
 
 const Form = styled.form`
   width: 25rem;
@@ -12,18 +16,22 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
 
-  p {
+  p:last-of-type {
     margin-top: 1.5rem;
   }
 `
 
 export const UserLogin = () => {
     const dispatch = useAppDispatch();
+    const {user} = useAppSelector((state) => state);
     const [formData, setFormData] = useState({email: '', password: ''});
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
     const history = useHistory();
-    const {user} = useAppSelector((state) => state);
+    const {register, handleSubmit, formState: {errors}} = useForm<ILoginForm>({
+        mode: 'onBlur',
+        resolver: yupResolver<yup.AnyObjectSchema>(LoginSchema)
+    });
 
     const updateField = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormData({
@@ -32,8 +40,7 @@ export const UserLogin = () => {
         });
     };
 
-    const signInWithEmailAndPasswordHandler = async (e: React.SyntheticEvent): Promise<void> => {
-        e.preventDefault();
+    const signInWithEmailAndPasswordHandler = async (): Promise<void> => {
         try {
             setLoading(true);
             const request = await firebaseSignInWithEmailAndPassword(formData.email, formData.password);
@@ -61,21 +68,25 @@ export const UserLogin = () => {
         <Wrapper>
             <h2>Nice to see You</h2>
             <Line/>
-            <Form onSubmit={signInWithEmailAndPasswordHandler}>
+            <Form onSubmit={handleSubmit(signInWithEmailAndPasswordHandler)}>
                 <Input
+                    register={{...register('email')}}
                     type='email'
-                    name='email'
                     placeholder='Email'
                     value={formData.email}
                     onChange={updateField}
+                    required
                 />
+                <p>{errors.email?.message}</p>
                 <Input
+                    register={{...register('password')}}
                     type='password'
-                    name='password'
                     placeholder='Password'
                     value={formData.password}
                     onChange={updateField}
+                    required
                 />
+                <p>{errors.password?.message}</p>
                 <Button>Login</Button>
                 {message && message}
                 {loading && <SpinnerCube/>}

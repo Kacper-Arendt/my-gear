@@ -10,7 +10,7 @@ import { Button, Heading } from "@chakra-ui/react";
 import { Line } from "../../UI/Line";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import {AppStatus, device} from "../../../models/Models";
+import {IAppStatus, device} from "../../../models/Models";
 import {changeStatus} from "../../../redux/slice/AppSlice";
 
 const Wrapper = styled.div`
@@ -106,9 +106,9 @@ export const BikeItem = () => {
 
   const deleteComponent = async (name: string) => {
     if (item && name) {
-      dispatch(changeStatus(AppStatus.Loading));
+      dispatch(changeStatus(IAppStatus.Loading));
       await deleteBikeComponent(item, name);
-      dispatch(changeStatus(AppStatus.Idle));
+      dispatch(changeStatus(IAppStatus.Idle));
     }
   };
 

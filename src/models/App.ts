@@ -1,6 +1,6 @@
-import { AppStatus } from "./Enums";
+import { IAppStatus } from "./Enums";
 
 export interface IApp {
-  status: AppStatus;
+  status: IAppStatus;
   readonly message?: string;
 }

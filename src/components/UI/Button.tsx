@@ -7,13 +7,14 @@ interface IProps {
     onClick?: (e: React.SyntheticEvent) => void,
     children: string,
     type?: 'submit' | 'reset'
+    disabled?: boolean,
 }
 
 const ButtonEl = styled.button<IProps>`
   width: 100%;
   max-width: 30rem;
   height: 4rem;
-  margin: .5rem 0;
+  margin: 3rem 0;
   border: none;
   color: white;
   cursor: pointer;
@@ -35,6 +36,7 @@ export const Button = (props: IProps) => {
             size={props.size}
             onClick={props.onClick}
             backgroundColor={props.backgroundColor}
+            disabled={props.disabled}
         >
             {props.children}
         </ButtonEl>)
